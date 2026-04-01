@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Träning">
+    <title>Träningsprogram</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f5f5f7;
+            --bg-card: #ffffff;
+            --text-primary: #1d1d1f;
+            --text-secondary: #6e6e73;
+            --accent: #007aff;
+            --accent-hover: #0051d5;
+            --success: #34c759;
+            --border: #d2d2d7;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #000000;
+            --bg-secondary: #1c1c1e;
+            --bg-card: #2c2c2e;
+            --text-primary: #ffffff;
+            --text-secondary: #98989d;
+            --accent: #0a84ff;
+            --accent-hover: #409cff;
+            --success: #30d158;
+            --border: #38383a;
+            --shadow: rgba(0, 0, 0, 0.3);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.5;
+            padding-bottom: 80px;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        body.no-timer {
+            padding-bottom: 20px;
+        }
+
+        .header {
+            background: var(--bg-card);
+            padding: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--border);
+            box-shadow: 0 2px 10px var(--shadow);
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .theme-toggle {
+            background: var(--bg-secondary);
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 22px;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
+        }
+
+        .theme-toggle:active {
+            transform: scale(0.95);
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 10px;
+            background: var(--bg-secondary);
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tab.active {
+            background: var(--accent);
+            color: white;
+        }
+
+        .container {
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .exercise-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 8px var(--shadow);
+        }
+
+        .exercise-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 15px;
+        }
+
+        .exercise-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .exercise-icon {
+            font-size: 32px;
+        }
+
+        .exercise-target {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .weight-input-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .input-wrapper {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .weight-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            text-align: center;
+        }
+
+        .weight-input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .sets-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .set-checkbox {
+            flex: 1;
+            position: relative;
+        }
+
+        .set-checkbox input {
+            position: absolute;
+            opacity: 0;
+        }
+
+        .set-checkbox label {
+            display: block;
+            padding: 15px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .set-checkbox input:checked + label {
+            background: var(--success);
+            color: white;
+            border-color: var(--success);
+        }
+
+        .instructions-toggle {
+            width: 100%;
+            padding: 12px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--accent);
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        .instructions {
+            display: none;
+            padding: 15px;
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .instructions.show {
+            display: block;
+        }
+
+        .instructions h4 {
+            margin: 10px 0 5px 0;
+            color: var(--accent);
+        }
+
+        .warmup-card, .stretch-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 1px solid var(--border);
+        }
+
+        .warmup-card h3, .stretch-card h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .warmup-card ul, .stretch-card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .warmup-card li, .stretch-card li {
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .warmup-card li:last-child, .stretch-card li:last-child {
+            border-bottom: none;
+        }
+
+        .timer-section {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--bg-card);
+            padding: 15px 20px;
+            border-top: 1px solid var(--border);
+            box-shadow: 0 -2px 10px var(--shadow);
+            z-index: 100;
+        }
+
+        .timer-section.hidden {
+            display: none;
+        }
+
+        .timer-display {
+            font-size: 36px;
+            font-weight: 700;
+            text-align: center;
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+
+        .timer-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .timer-btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .timer-btn.start {
+            background: var(--accent);
+            color: white;
+        }
+
+        .timer-btn.start:active {
+            background: var(--accent-hover);
+        }
+
+        .timer-btn.reset {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .history-item {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 15px;
+            border: 1px solid var(--border);
+        }
+
+        .history-date {
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: var(--accent);
+        }
+
+        .history-exercise {
+            font-size: 14px;
+            padding: 5px 0;
+            color: var(--text-secondary);
+        }
+
+        .clear-history {
+            width: 100%;
+            padding: 15px;
+            background: #ff3b30;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+
+        .info-text {
+            text-align: center;
+            color: var(--text-secondary);
+            padding: 40px 20px;
+            font-size: 16px;
+        }
+
+        .new-session-btn {
+            width: 100%;
+            padding: 18px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px var(--shadow);
+        }
+
+        .new-session-btn:active {
+            transform: scale(0.98);
+        }
+
+        .new-session-btn:disabled {
+            background: var(--border);
+            color: var(--text-secondary);
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-top">
+            <h1>💪 Träning</h1>
+            <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+        </div>
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('workout')">Träning</button>
+            <button class="tab" onclick="showTab('history')">Historik</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- WORKOUT TAB -->
+        <div id="workout" class="section active">
+            <button class="new-session-btn" onclick="startNewSession()">🆕 Nytt träningspass</button>
+
+            <!-- Uppvärmning -->
+            <div class="warmup-card">
+                <h3 style="margin-bottom: 15px;">🔥 Uppvärmning – 5 min</h3>
+                <ul style="margin-bottom: 15px;">
+                    <li>Crosstrainer - mjukt för lederna</li>
+                    <li>Löpband - rask promenad</li>
+                    <li>Cykel - lätt motstånd</li>
+                </ul>
+                <div class="set-checkbox">
+                    <input type="checkbox" id="warmup-done" onchange="saveActivityCompletion('warmup', this.checked)">
+                    <label for="warmup-done">✓ Klar</label>
+                </div>
+            </div>
+
+            <h2 style="margin: 30px 0 20px 0; font-size: 24px;">🦵 BEN</h2>
+
+            <!-- Benpress -->
+            <div class="exercise-card">
+                <div class="exercise-header">
+                    <div>
+                        <div class="exercise-title">Benpress</div>
+                        <div class="exercise-target">Framsida lår, rumpa, baksida lår</div>
+                    </div>
+                    <div class="exercise-icon">🦵</div>
+                </div>
+                
+                <div class="weight-input-group">
+                    <div class="input-wrapper">
+                        <div class="input-label">Vikt (kg)</div>
+                        <input type="number" class="weight-input" id="benpress-weight" value="70" onchange="saveExerciseData('benpress', 'weight', this.value)">
+                    </div>
+                    <div class="input-wrapper">
+                        <div class="input-label">Set</div>
+                        <input type="number" class="weight-input" id="benpress-sets" value="2" onchange="saveExerciseData('benpress', 'sets', this.value)">
+                    </div>
+                    <div class="input-wrapper">
+                        <div class="input-label">Reps</div>
+                        <input type="number" class="weight-input" id="benpress-reps" value="12" onchange="saveExerciseData('benpress', 'reps', this.value)">
+                    </div>
+                </div>
+
+                <div class="sets-container" id="benpress-checks">
+                    <div class="set-checkbox">
+                        <input type="checkbox" id="benpress-set1" onchange="saveSetCompletion('benpress', 1, this.checked)">
+                        <label for="benpress-set1">Set 1</label>
+                    </div>
+                    <div class="set-checkbox">
+                        <input type="checkbox" id="benpress-set2" onchange="saveSetCompletion('benpress', 2, this.checked)">
+                        <label for="benpress-set2">Set 2</label>
+                    </div>
+                </div>
+
+                <button class="instructions-toggle" onclick="toggleInstructions('benpress')">📖 Instruktioner</button>
+                <div class="instructions" id="benpress-instructions">
+                    <h4>Hur maskinen ser ut:</h4>
+                    <p>En lutad stol med en stor fotplatta framför dig som du pressar bort från kroppen.</p>
+                    <h4>Så gör du:</h4>
+                    <p>• Sitt med ryggen mot ryggstödet<br>
+                    • Fötterna axelbrett på plattan<br>
+                    • Pressa plattan bort – benen nästan raka<br>
+                    • Sänk långsamt</p>
+                </div>
+            </div>
+
+            <!-- Bensträck -->
+            <div class="exercise-card">
+                <div class="exercise-header">
+                    <div>
+                        <div class="exercise-title">Bensträck (Leg Extension)</div>
+                        <div class="exercise-target">Framsida lår</div>
+                    </div>
+                    <div class="exercise-icon">🦵</div>
+                </div>
+                
+                <div class="weight-input-group">
+                    <div class="input-wrapper">
+                        <div class="input-label">Vikt (kg)</div>
+                        <input type="number" class="weight-input" id="benstrack-weight" value="25" onchange="saveExerciseData('benstrack', 'weight', this.value)">
+                    </div>
+                    <div class="input-wrapper">
+                        <div class="input-label">Set</div>
+                        <input type="number" class="weight-input" id="benstrack-sets" value="2" onchange="saveExerciseData('benstrack', 'sets', this.value)">
+                    </div>
+                    <div class="input-wrapper">
+                        <div class="input-label">Reps</div>
+                        <input type="number" class="weight-input" id="benstrack-reps" value="12" onchange="saveExerciseData('benstrack', 'reps', this.value)">
+                    </div>
+                </div>
+
+                <div class="sets-container" id="benstrack-checks">
+                    <div class="set-checkbox">
+                        <input type="checkbox" id="benstrack-set1" onchange="saveSetCompletion('benstrack', 1, this.checked)">
+                        <label for="benstrack-set1">Set 1</label>
+                    </div>
+                    <div class="set-checkbox">
+                        <input type="checkbox" id="benstrack-set2" onchange="saveSetCompletion('benstrack', 2, this.checked)">
+                        <label for="benstrack-set2">Set 2</label>
+                    </div>
+                </div>
+
+                <button class="instructions-toggle" onclick="toggleInstructions('benstrack')">📖 Instruktioner</button>
+                <div class="instructions" id="benstrack-instructions">
+                    <h4>Hur maskinen ser ut:</h4>
+                    <p>Du sitter i en stol och har en vadkudde framför skenbenen som du lyfter med att sträcka benen.</p>
+                    <h4>Så gör du:</h4>
+                    <p>• Sitt med knävecken nära sätets framkant<br>
+                    • Fötterna bakom stoppkudden<br>
+                    • Sträck benen uppåt<br>
+                    • Sänk kontrollerat</p>
+                </div>
+            </div>
+
+            <!-- Lårcurl -->
+            <div class="exercise-card">
+                <div class="exercise-header">
+                    <div>
+                        <div class="exercise-title">Lårcurl</div>
+                        <div class="exercise-target">Baksida lår</div>
+                    </div>
+                    <div class="exercise-icon">🦵</div>
+                </div>
+                
+                <div class="weight-input-group">
+                    <div class="input-wrapper">
+                        <div class="input-label">Vikt (kg)</div>
+                        <input type="number" class="weight-input" id="larcurl-weight" value="30" onchange="saveExerciseData('larcurl', 'weight', this.value)">
+                    </div>
+                    <div class="input-wrapper">
+                        <div class="input-label">Set</div>
+                        <input type="number" class="weight-input" id="larcurl-sets" value="2" onchange="saveExerciseData('larcurl', 'sets', this.value)">
+                    </div>
+                    <div class="input-wrapper">
+                        <div class="input-label">Reps</div>
+                        <input type="number" class="weight-input" id="larcurl-reps" value="12" onchange="saveExerciseData('larcurl', 'reps', this.value)">
+                    </div>
+                </div>
+
+                <div class="sets-container" id="larcurl-checks">
+                    <div class="set-checkbox">
+                        <input type="checkbox" id="larcurl-set1" onchange="saveSetCompletion('larcurl', 1, this.checked)">
+                        <label for="larcurl-set1">Set 1</label>
+                    </div>
+                    <div class="set-checkbox">
+                        <input type="checkbox" id="larcurl-set2" onchange="saveSetCompletion('larcurl', 2, this.checked)">
+                        <label for="larcurl-set2">Set 2</label>
+                    </div>
+                </div>
+
+                <button class="instructions-toggle" onclick="toggleInstructions('larcurl')">📖 Instruktioner</button>
+                <div class="instructions" id="larcurl-instructions">
+                    <h4>Hur maskinen ser ut:</h4>
+                    <p>Sittande: du sitter och har en vadkudde bakom underbenen som du drar bakåt.</p>
+                    <h4>Så gör du:</h4>
+                    <p>• Sitt så knäleden är i linje med maskinens vridpunkt<br>
+                    • Böj benen genom att dra vadkudden bakåt<br>
+                    • Sänk långsamt</p>
+                </div>
+            </div>
+
+            <h2 style="margin: 30px 0 20px 0; font-size: 24px;">💪 ÖVERKROPP</h2>
+
+            <!-- Sittande rodd -->
+            <div class="exercise-card">
+                <div class="exercise-header">
+                    <div>
+                        <div class="exercise-title">Sittande rodd</div>
+                        <div class="exercise-target">Övre rygg, baksida axlar</div>
+                    </div>
+                    <div class="exercise-icon">💪</div>
+                </div>
+                
+                <div class="weight-input-group">
+                    <div class="input-wrapper">
+                        <div class="input-label">Vikt (kg)</div>
+                        <input type="number" class="weight-input" id="rodd-weight" value="32" onchange="saveExerciseData('rodd', 'weight', this.value)">
+                    </div>
+                    <div class="input-wrapper">
+                        <div class="input-label">Set</div>
+                        <input type="number" class="weight-input" id="rodd-sets" value="2" onchange="saveExerciseData('rodd', 'sets', this.value)">
+                    </div>
+                    <div class="input-wrapper">
+                        <div class="input-label">Reps</div>
+                        <input type="number" class="weight-input" id="rodd-reps" value="12" onchange="saveExerciseData('rodd', 'reps', this.value)">
+                    </div>
+                </div>
+
+                <div class="sets-container" id="rodd-checks">
+                    <div class="set-checkbox">
+                        <input type="checkbox" id="rodd-set1" onchange="saveSetCompletion('rodd', 1, this.checked)">
+                        <label for="rodd-set1">Set 1</label>
+                    </div>
+                    <div class="set-checkbox">
+                        <input type="checkbox" id="rodd-set2" onchange="saveSetCompletion('rodd', 2, this.checked)">
+                        <label for="rodd-set2">Set 2</label>
+                    </div>
+                </div>
+
+                <button class="instructions-toggle" onclick="toggleInstructions('rodd')">📖 Instruktioner</button>
+                <div class="instructions" id="rodd-instructions">
+                    <h4>Hur maskinen ser ut:</h4>
+                    <p>Du sitter med ett handtag framför dig som du drar mot kroppen.</p>
+                    <h4>Så gör du:</h4>
+                    <p>• Sitt med rak rygg<br>
+                    • Ta tag i handtaget<br>
+                    • Dra handtaget mot magen och för armbågarna bakåt<br>
+                    • Släpp fram igen kontrollerat</p>
+                </div>
+            </div>
+
+            <!-- Bröstpress -->
+            <div class="exercise-card">
+                <div class="exercise-header">
+                    <div>
+                        <div class="exercise-title">Bröstpress</div>
+                        <div class="exercise-target">Bröst, axlar, triceps</div>
+                    </div>
+                    <div class="exercise-icon">💪</div>
+                </div>
+                
+                <div class="weight-input-group">
+                    <div class="input-wrapper">
+                        <div class="input-label">Vikt (kg)</div>
+                        <input type="number" class="weight-input" id="brostpress-weight" value="25" onchange="saveExerciseData('brostpress', 'weight', this.value)">
+                    </div>
+                    <div class="input-wrapper">
+                        <div class="input-label">Set</div>
+                        <input type="number" class="weight-input" id="brostpress-sets" value="2" onchange="saveExerciseData('brostpress', 'sets', this.value)">
+                    </div>
+                    <div class="input-wrapper">
+                        <div class="input-label">Reps</div>
+                        <input type="number" class="weight-input" id="brostpress-reps" value="12" onchange="saveExerciseData('brostpress', 'reps', this.value)">
+                    </div>
+                </div>
+
+                <div class="sets-container" id="brostpress-checks">
+                    <div class="set-checkbox">
+                        <input type="checkbox" id="brostpress-set1" onchange="saveSetCompletion('brostpress', 1, this.checked)">
+                        <label for="brostpress-set1">Set 1</label>
+                    </div>
+                    <div class="set-checkbox">
+                        <input type="checkbox" id="brostpress-set2" onchange="saveSetCompletion('brostpress', 2, this.checked)">
+                        <label for="brostpress-set2">Set 2</label>
+                    </div>
+                </div>
+
+                <button class="instructions-toggle" onclick="toggleInstructions('brostpress')">📖 Instruktioner</button>
+                <div class="instructions" id="brostpress-instructions">
+                    <h4>Hur maskinen ser ut:</h4>
+                    <p>Som ett sittande bänkpress: du sitter och pressar två handtag framåt.</p>
+                    <h4>Så gör du:</h4>
+                    <p>• Sitt med ryggen rak mot ryggstödet<br>
+                    • Handtagen ska vara i brösthöjd<br>
+                    • Pressa framåt tills armarna nästan är raka<br>
+                    • Sänk långsamt tillbaka</p>
+                </div>
+            </div>
+
+            <!-- Axelpress -->
+            <div class="exercise-card">
+                <div class="exercise-header">
+                    <div>
+                        <div class="exercise-title">Axelpress</div>
+                        <div class="exercise-target">Axlar, triceps</div>
+                    </div>
+                    <div class="exercise-icon">💪</div>
+                </div>
+                
+                <div class="weight-input-group">
+                    <div class="input-wrapper">
+                        <div class="input-label">Vikt (kg)</div>
+                        <input type="number" class="weight-input" id="axelpress-weight" value="20" onchange="saveExerciseData('axelpress', 'weight', this.value)">
+                    </div>
+                    <div class="input-wrapper">
+                        <div class="input-label">Set</div>
+                        <input type="number" class="weight-input" id="axelpress-sets" value="2" onchange="saveExerciseData('axelpress', 'sets', this.value)">
+                    </div>
+                    <div class="input-wrapper">
+                        <div class="input-label">Reps</div>
+                        <input type="number" class="weight-input" id="axelpress-reps" value="12" onchange="saveExerciseData('axelpress', 'reps', this.value)">
+                    </div>
+                </div>
+
+                <div class="sets-container" id="axelpress-checks">
+                    <div class="set-checkbox">
+                        <input type="checkbox" id="axelpress-set1" onchange="saveSetCompletion('axelpress', 1, this.checked)">
+                        <label for="axelpress-set1">Set 1</label>
+                    </div>
+                    <div class="set-checkbox">
+                        <input type="checkbox" id="axelpress-set2" onchange="saveSetCompletion('axelpress', 2, this.checked)">
+                        <label for="axelpress-set2">Set 2</label>
+                    </div>
+                </div>
+
+                <button class="instructions-toggle" onclick="toggleInstructions('axelpress')">📖 Instruktioner</button>
+                <div class="instructions" id="axelpress-instructions">
+                    <h4>Hur maskinen ser ut:</h4>
+                    <p>En stol där handtagen sitter ovanför axlarna – du pressar rakt uppåt.</p>
+                    <h4>Så gör du:</h4>
+                    <p>• Sitt stabilt med ryggen mot stödet<br>
+                    • Starta med handtagen vid öronhöjd<br>
+                    • Pressa uppåt tills armarna nästan är raka<br>
+                    • Sänk kontrollerat</p>
+                </div>
+            </div>
+
+            <h2 style="margin: 30px 0 20px 0; font-size: 24px;">🧱 BÅL</h2>
+
+            <!-- Plankan -->
+            <div class="exercise-card">
+                <div class="exercise-header">
+                    <div>
+                        <div class="exercise-title">Plankan</div>
+                        <div class="exercise-target">Core, magmuskler</div>
+                    </div>
+                    <div class="exercise-icon">🧱</div>
+                </div>
+                
+                <div class="weight-input-group">
+                    <div class="input-wrapper">
+                        <div class="input-label">Sekunder</div>
+                        <input type="number" class="weight-input" id="plank-weight" value="30" onchange="saveExerciseData('plank', 'weight', this.value)">
+                    </div>
+                    <div class="input-wrapper">
+                        <div class="input-label">Set</div>
+                        <input type="number" class="weight-input" id="plank-sets" value="2" onchange="saveExerciseData('plank', 'sets', this.value)">
+                    </div>
+                    <div class="input-wrapper">
+                        <div class="input-label">-</div>
+                        <input type="text" class="weight-input" value="-" disabled style="opacity: 0.3;">
+                    </div>
+                </div>
+
+                <div class="sets-container" id="plank-checks">
+                    <div class="set-checkbox">
+                        <input type="checkbox" id="plank-set1" onchange="saveSetCompletion('plank', 1, this.checked)">
+                        <label for="plank-set1">Set 1</label>
+                    </div>
+                    <div class="set-checkbox">
+                        <input type="checkbox" id="plank-set2" onchange="saveSetCompletion('plank', 2, this.checked)">
+                        <label for="plank-set2">Set 2</label>
+                    </div>
+                </div>
+
+                <button class="instructions-toggle" onclick="toggleInstructions('plank')">📖 Instruktioner</button>
+                <div class="instructions" id="plank-instructions">
+                    <h4>Så gör du:</h4>
+                    <p>• Ingen maskin behövs<br>
+                    • Stå på armbågar och tår<br>
+                    • Håll kroppen rak som en planka<br>
+                    • Spänn magen och håll position</p>
+                </div>
+            </div>
+
+            <!-- Konditionsavslut -->
+            <div class="warmup-card">
+                <h3 style="margin-bottom: 15px;">🏃 Konditionsavslut – 5-7 min</h3>
+                <ul style="margin-bottom: 15px;">
+                    <li>Roddmaskin - lugnt och rytmiskt</li>
+                    <li>Cykel - lätt motstånd</li>
+                    <li>Löpband - rask promenad med lite lutning</li>
+                </ul>
+                <div class="set-checkbox">
+                    <input type="checkbox" id="cardio-done" onchange="saveActivityCompletion('cardio', this.checked)">
+                    <label for="cardio-done">✓ Klar</label>
+                </div>
+            </div>
+
+            <!-- Stretch -->
+            <div class="stretch-card">
+                <h3 style="margin-bottom: 10px;">🧘 Stretch – 2-5 min</h3>
+                <p style="margin-bottom: 15px; color: var(--text-secondary);">Håll varje stretch 20-30 sekunder</p>
+                <ul style="margin-bottom: 15px;">
+                    <li><strong>Framsida lår:</strong> Stå upp, dra hälen mot rumpan</li>
+                    <li><strong>Baksida lår:</strong> Sträck ett ben, fäll fram med rak rygg</li>
+                    <li><strong>Rumpa:</strong> Lägg ena foten över knät, luta framåt</li>
+                    <li><strong>Bröst:</strong> Fläta händerna bakom ryggen, sträck bakåt</li>
+                    <li><strong>Axlar:</strong> För armen över bröstet, håll med andra handen</li>
+                    <li><strong>Rygg:</strong> Sträck armarna fram, runda ryggen</li>
+                </ul>
+                <div class="set-checkbox">
+                    <input type="checkbox" id="stretch-done" onchange="saveActivityCompletion('stretch', this.checked)">
+                    <label for="stretch-done">✓ Klar</label>
+                </div>
+            </div>
+
+            <!-- Complete Workout Button -->
+            <button class="new-session-btn" style="background: var(--success); margin-top: 30px; margin-bottom: 100px;" id="complete-btn-workout" onclick="completeWorkout()" disabled>
+                ✅ Avsluta träningspass
+            </button>
+        </div>
+
+        <!-- HISTORY TAB -->
+        <div id="history" class="section">
+            <div id="history-content">
+                <div class="info-text">Ingen träningshistorik än.<br>Starta ett nytt pass för att börja logga!</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Timer -->
+    <div class="timer-section">
+        <div class="timer-display" id="timer-display">0:45</div>
+        <div class="timer-buttons">
+            <button class="timer-btn start" onclick="startTimer()">▶️ Starta vila</button>
+            <button class="timer-btn reset" onclick="resetTimer()">🔄 Återställ</button>
+        </div>
+    </div>
+
+    <script>
+        let timerInterval = null;
+        let timeLeft = 45;
+        const exercises = ['benpress', 'benstrack', 'larcurl', 'rodd', 'brostpress', 'axelpress', 'plank'];
+        const activities = ['warmup', 'cardio', 'stretch'];
+
+        // Initialize app
+        function initApp() {
+            loadTheme();
+            loadExerciseData();
+            loadHistory();
+        }
+
+        // Theme toggle
+        function toggleTheme() {
+            const body = document.body;
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            // Update emoji
+            document.querySelector('.theme-toggle').textContent = newTheme === 'dark' ? '☀️' : '🌙';
+        }
+
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.body.setAttribute('data-theme', savedTheme);
+            document.querySelector('.theme-toggle').textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+        }
+
+        // Tab switching
+        function showTab(tabName) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active from all tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(tabName).classList.add('active');
+            
+            // Activate clicked tab
+            event.target.classList.add('active');
+
+            // Show/hide timer based on tab
+            const timerSection = document.querySelector('.timer-section');
+            if (tabName === 'history') {
+                timerSection.classList.add('hidden');
+                document.body.classList.add('no-timer');
+            } else {
+                timerSection.classList.remove('hidden');
+                document.body.classList.remove('no-timer');
+            }
+
+            if (tabName === 'history') {
+                loadHistory();
+            }
+        }
+
+        // Instructions toggle
+        function toggleInstructions(exerciseId) {
+            const instructions = document.getElementById(exerciseId + '-instructions');
+            instructions.classList.toggle('show');
+        }
+
+        // Save exercise data
+        function saveExerciseData(exercise, field, value) {
+            const data = JSON.parse(localStorage.getItem('exerciseData') || '{}');
+            if (!data[exercise]) data[exercise] = {};
+            data[exercise][field] = value;
+            localStorage.setItem('exerciseData', JSON.stringify(data));
+        }
+
+        // Load exercise data
+        function loadExerciseData() {
+            const data = JSON.parse(localStorage.getItem('exerciseData') || '{}');
+            
+            exercises.forEach(exercise => {
+                if (data[exercise]) {
+                    if (data[exercise].weight) {
+                        const weightInput = document.getElementById(exercise + '-weight');
+                        if (weightInput) weightInput.value = data[exercise].weight;
+                    }
+                    if (data[exercise].sets) {
+                        const setsInput = document.getElementById(exercise + '-sets');
+                        if (setsInput) setsInput.value = data[exercise].sets;
+                    }
+                    if (data[exercise].reps) {
+                        const repsInput = document.getElementById(exercise + '-reps');
+                        if (repsInput) repsInput.value = data[exercise].reps;
+                    }
+                }
+            });
+
+            // Load current session checkboxes
+            const sessionData = JSON.parse(localStorage.getItem('currentSession') || '{}');
+            exercises.forEach(exercise => {
+                if (sessionData[exercise]) {
+                    sessionData[exercise].forEach((checked, index) => {
+                        const checkbox = document.getElementById(exercise + '-set' + (index + 1));
+                        if (checkbox) checkbox.checked = checked;
+                    });
+                }
+            });
+
+            // Load activity checkboxes
+            activities.forEach(activity => {
+                if (sessionData[activity]) {
+                    const checkbox = document.getElementById(activity + '-done');
+                    if (checkbox) checkbox.checked = sessionData[activity];
+                }
+            });
+        }
+
+        // Save set completion
+        function saveSetCompletion(exercise, setNumber, checked) {
+            const sessionData = JSON.parse(localStorage.getItem('currentSession') || '{}');
+            if (!sessionData[exercise]) {
+                sessionData[exercise] = [];
+            }
+            sessionData[exercise][setNumber - 1] = checked;
+            localStorage.setItem('currentSession', JSON.stringify(sessionData));
+            startSessionTimer();
+            updateCompleteButton();
+        }
+
+        // Save activity completion
+        function saveActivityCompletion(activity, checked) {
+            const sessionData = JSON.parse(localStorage.getItem('currentSession') || '{}');
+            sessionData[activity] = checked;
+            localStorage.setItem('currentSession', JSON.stringify(sessionData));
+            startSessionTimer();
+            updateCompleteButton();
+        }
+
+        // Start session timer (only once per session)
+        function startSessionTimer() {
+            if (!localStorage.getItem('sessionStartTime')) {
+                localStorage.setItem('sessionStartTime', Date.now());
+            }
+        }
+
+        // Update complete button state
+        function updateCompleteButton() {
+            const sessionData = JSON.parse(localStorage.getItem('currentSession') || '{}');
+            let hasActivity = false;
+            
+            // Check if any exercise or activity is checked
+            exercises.forEach(exercise => {
+                if (sessionData[exercise] && sessionData[exercise].some(x => x)) {
+                    hasActivity = true;
+                }
+            });
+            
+            activities.forEach(activity => {
+                if (sessionData[activity]) {
+                    hasActivity = true;
+                }
+            });
+            
+            const btn = document.getElementById('complete-btn-workout');
+            if (btn) {
+                btn.disabled = !hasActivity;
+            }
+        }
+
+        // Complete workout
+        function completeWorkout() {
+            const sessionData = JSON.parse(localStorage.getItem('currentSession') || '{}');
+            const sessionStartTime = localStorage.getItem('sessionStartTime');
+            
+            if (!sessionStartTime) {
+                alert('Inget träningspass att avsluta!');
+                return;
+            }
+
+            // Calculate duration
+            const duration = Date.now() - parseInt(sessionStartTime);
+            const durationMinutes = Math.round(duration / 60000);
+
+            // Save to history
+            const history = JSON.parse(localStorage.getItem('workoutHistory') || '[]');
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('sv-SE', { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+
+            const workoutLog = {
+                date: dateStr,
+                timestamp: now.getTime(),
+                duration: durationMinutes,
+                exercises: {},
+                activities: {}
+            };
+
+            // Save activities
+            activities.forEach(activity => {
+                if (sessionData[activity]) {
+                    workoutLog.activities[activity] = true;
+                }
+            });
+
+            // Save exercises
+            exercises.forEach(exercise => {
+                if (sessionData[exercise] && sessionData[exercise].some(x => x)) {
+                    const completedSets = sessionData[exercise].filter(x => x).length;
+                    
+                    const weightInput = document.getElementById(exercise + '-weight');
+                    const repsInput = document.getElementById(exercise + '-reps');
+                    
+                    workoutLog.exercises[exercise] = {
+                        weight: weightInput ? weightInput.value : '-',
+                        sets: completedSets,
+                        reps: repsInput ? repsInput.value : '-'
+                    };
+                }
+            });
+
+            history.unshift(workoutLog);
+            
+            if (history.length > 20) {
+                history.length = 20;
+            }
+
+            localStorage.setItem('workoutHistory', JSON.stringify(history));
+
+            // Clear session
+            localStorage.removeItem('currentSession');
+            localStorage.removeItem('sessionStartTime');
+            
+            // Uncheck all
+            exercises.forEach(exercise => {
+                const checks = document.querySelectorAll(`#${exercise}-checks input[type="checkbox"]`);
+                checks.forEach(check => check.checked = false);
+            });
+
+            activities.forEach(activity => {
+                const checkbox = document.getElementById(activity + '-done');
+                if (checkbox) checkbox.checked = false;
+            });
+
+            updateCompleteButton();
+
+            alert(`🎉 Träningspass avslutat!\n\nTid: ${durationMinutes} minuter\n\nBra jobbat!`);
+        }
+
+        // Start new session
+        function startNewSession() {
+            const sessionData = JSON.parse(localStorage.getItem('currentSession') || '{}');
+            
+            // Check if there's any data in current session
+            let hasData = false;
+            exercises.forEach(exercise => {
+                if (sessionData[exercise] && sessionData[exercise].some(x => x)) {
+                    hasData = true;
+                }
+            });
+
+            if (hasData) {
+                // Save to history
+                const history = JSON.parse(localStorage.getItem('workoutHistory') || '[]');
+                const now = new Date();
+                const dateStr = now.toLocaleDateString('sv-SE', { 
+                    weekday: 'long', 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+
+                const workoutLog = {
+                    date: dateStr,
+                    timestamp: now.getTime(),
+                    exercises: {},
+                    activities: {}
+                };
+
+                // Calculate duration if session was started
+                const sessionStartTime = localStorage.getItem('sessionStartTime');
+                if (sessionStartTime) {
+                    const duration = Date.now() - parseInt(sessionStartTime);
+                    workoutLog.duration = Math.round(duration / 60000);
+                }
+
+                // Save activities (warmup, cardio, stretch)
+                activities.forEach(activity => {
+                    if (sessionData[activity]) {
+                        workoutLog.activities[activity] = true;
+                    }
+                });
+
+                exercises.forEach(exercise => {
+                    if (sessionData[exercise] && sessionData[exercise].some(x => x)) {
+                        const completedSets = sessionData[exercise].filter(x => x).length;
+                        
+                        // Read current values from input fields
+                        const weightInput = document.getElementById(exercise + '-weight');
+                        const repsInput = document.getElementById(exercise + '-reps');
+                        
+                        workoutLog.exercises[exercise] = {
+                            weight: weightInput ? weightInput.value : '-',
+                            sets: completedSets,
+                            reps: repsInput ? repsInput.value : '-'
+                        };
+                    }
+                });
+
+                history.unshift(workoutLog);
+                
+                // Keep only last 20 workouts
+                if (history.length > 20) {
+                    history.length = 20;
+                }
+
+                localStorage.setItem('workoutHistory', JSON.stringify(history));
+            }
+
+            // Clear current session
+            localStorage.setItem('currentSession', '{}');
+            localStorage.removeItem('sessionStartTime');
+            
+            // Uncheck all exercise checkboxes
+            exercises.forEach(exercise => {
+                const checks = document.querySelectorAll(`#${exercise}-checks input[type="checkbox"]`);
+                checks.forEach(check => check.checked = false);
+            });
+
+            // Uncheck all activity checkboxes
+            activities.forEach(activity => {
+                const checkbox = document.getElementById(activity + '-done');
+                if (checkbox) checkbox.checked = false;
+            });
+
+            updateCompleteButton();
+
+            // Show confirmation
+            alert('✅ Nytt träningspass startat!' + (hasData ? '\n\nFöregående pass sparat i historiken.' : ''));
+        }
+
+        // Load history
+        function loadHistory() {
+            const history = JSON.parse(localStorage.getItem('workoutHistory') || '[]');
+            const historyContent = document.getElementById('history-content');
+
+            if (history.length === 0) {
+                historyContent.innerHTML = '<div class="info-text">Ingen träningshistorik än.<br>Starta ett nytt pass för att börja logga!</div>';
+                return;
+            }
+
+            let html = '<div class="history-list">';
+            
+            history.forEach(workout => {
+                html += `<div class="history-item">`;
+                html += `<div class="history-date">${workout.date}</div>`;
+                
+                // Show duration
+                if (workout.duration) {
+                    html += `<div class="history-exercise" style="color: var(--accent); font-weight: 700; margin-bottom: 5px;">⏱️ Totaltid: ${workout.duration} minuter</div>`;
+                }
+                
+                // Show completed activities
+                if (workout.activities) {
+                    const activityNames = [];
+                    if (workout.activities.warmup) activityNames.push('Uppvärmning');
+                    if (workout.activities.cardio) activityNames.push('Kondition');
+                    if (workout.activities.stretch) activityNames.push('Stretch');
+                    if (activityNames.length > 0) {
+                        html += `<div class="history-exercise" style="color: var(--success); font-weight: 600;">✓ ${activityNames.join(', ')}</div>`;
+                    }
+                }
+                
+                for (let [exercise, data] of Object.entries(workout.exercises)) {
+                    const exerciseName = getExerciseName(exercise);
+                    html += `<div class="history-exercise">${exerciseName}: ${data.weight} kg × ${data.sets} set × ${data.reps} reps</div>`;
+                }
+                
+                html += `</div>`;
+            });
+            
+            html += '</div>';
+            html += '<button class="clear-history" onclick="clearHistory()">🗑️ Rensa historik</button>';
+            
+            historyContent.innerHTML = html;
+        }
+
+        function getExerciseName(exercise) {
+            const names = {
+                'benpress': 'Benpress',
+                'benstrack': 'Bensträck',
+                'larcurl': 'Lårcurl',
+                'rodd': 'Sittande rodd',
+                'brostpress': 'Bröstpress',
+                'axelpress': 'Axelpress',
+                'plank': 'Plankan'
+            };
+            return names[exercise] || exercise;
+        }
+
+        function clearHistory() {
+            if (confirm('Är du säker på att du vill radera all träningshistorik?')) {
+                localStorage.setItem('workoutHistory', '[]');
+                loadHistory();
+            }
+        }
+
+        // Timer functions
+        function startTimer() {
+            if (timerInterval) {
+                pauseTimer();
+                return;
+            }
+
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    timerInterval = null;
+                    playSound();
+                    alert('⏰ Vilotiden är slut!');
+                    resetTimer();
+                }
+            }, 1000);
+
+            document.querySelector('.timer-btn.start').textContent = '⏸️ Pausa';
+        }
+
+        function pauseTimer() {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            document.querySelector('.timer-btn.start').textContent = '▶️ Fortsätt';
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            timeLeft = 45;
+            updateTimerDisplay();
+            document.querySelector('.timer-btn.start').textContent = '▶️ Starta vila';
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('timer-display').textContent = 
+                `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function playSound() {
+            // Create a simple beep sound using Web Audio API
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+
+            oscillator.frequency.value = 800;
+            oscillator.type = 'sine';
+
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.5);
+        }
+
+        // Initialize app on load
+        initApp();
+        updateCompleteButton();
+    </script>
+</body>
+</html>
