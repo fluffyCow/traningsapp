@@ -412,6 +412,28 @@
             opacity: 0.6;
             cursor: not-allowed;
         }
+
+        .activity-timer-display {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .activity-timer-text {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .activity-timer-text.warning {
+            color: #ff9500;
+        }
+
+        .activity-timer-text.danger {
+            color: #ff3b30;
+        }
     </style>
 </head>
 <body>
@@ -439,6 +461,18 @@
                     <li>Löpband - rask promenad</li>
                     <li>Cykel - lätt motstånd</li>
                 </ul>
+                
+                <!-- Activity Timer -->
+                <div id="warmup-timer-display" class="activity-timer-display" style="display: none;">
+                    <div class="activity-timer-text">⏱️ <span id="warmup-timer-value">5:00</span></div>
+                </div>
+                
+                <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                    <button class="timer-btn start" style="flex: 1;" onclick="startActivityTimer('warmup', 300)" id="warmup-timer-btn">
+                        ▶️ Starta 5 min
+                    </button>
+                </div>
+                
                 <div class="set-checkbox">
                     <input type="checkbox" id="warmup-done" onchange="saveActivityCompletion('warmup', this.checked)">
                     <label for="warmup-done">✓ Klar</label>
@@ -792,6 +826,21 @@
                     <li>Cykel - lätt motstånd</li>
                     <li>Löpband - rask promenad med lite lutning</li>
                 </ul>
+                
+                <!-- Activity Timer -->
+                <div id="cardio-timer-display" class="activity-timer-display" style="display: none;">
+                    <div class="activity-timer-text">⏱️ <span id="cardio-timer-value">5:00</span></div>
+                </div>
+                
+                <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                    <button class="timer-btn start" style="flex: 1;" onclick="startActivityTimer('cardio', 300)" id="cardio-timer-btn-5">
+                        ▶️ 5 min
+                    </button>
+                    <button class="timer-btn start" style="flex: 1;" onclick="startActivityTimer('cardio', 420)" id="cardio-timer-btn-7">
+                        ▶️ 7 min
+                    </button>
+                </div>
+                
                 <div class="set-checkbox">
                     <input type="checkbox" id="cardio-done" onchange="saveActivityCompletion('cardio', this.checked)">
                     <label for="cardio-done">✓ Klar</label>
@@ -834,7 +883,7 @@
     <div class="timer-section">
         <div class="timer-display" id="timer-display">0:45</div>
         <div class="timer-buttons">
-            <button class="timer-btn start" onclick="startTimer()">▶️ Starta vila</button>
+            <button class="timer-btn start" id="rest-timer-btn" onclick="startTimer()">▶️ Starta vila</button>
             <button class="timer-btn reset" onclick="resetTimer()">🔄 Återställ</button>
         </div>
     </div>
@@ -842,6 +891,7 @@
     <script>
         let timerInterval = null;
         let timeLeft = 45;
+        let activityTimers = {}; // Store activity timer intervals
         const exercises = ['benpress', 'benstrack', 'larcurl', 'rodd', 'brostpress', 'axelpress', 'plank'];
         const activities = ['warmup', 'cardio', 'stretch'];
 
@@ -953,7 +1003,37 @@
             activities.forEach(activity => {
                 if (sessionData[activity]) {
                     const checkbox = document.getElementById(activity + '-done');
-                    if (checkbox) checkbox.checked = sessionData[activity];
+                    if (checkbox) {
+                        checkbox.checked = sessionData[activity];
+                        
+                        // If checked, disable timer buttons and hide timer display
+                        if (sessionData[activity] && (activity === 'warmup' || activity === 'cardio')) {
+                            // Hide timer display
+                            const display = document.getElementById(activity + '-timer-display');
+                            if (display) {
+                                display.style.display = 'none';
+                            }
+                            
+                            if (activity === 'warmup') {
+                                const btn = document.getElementById('warmup-timer-btn');
+                                if (btn) {
+                                    btn.textContent = '✓ Färdig';
+                                    btn.disabled = true;
+                                }
+                            } else if (activity === 'cardio') {
+                                const btn5 = document.getElementById('cardio-timer-btn-5');
+                                const btn7 = document.getElementById('cardio-timer-btn-7');
+                                if (btn5) {
+                                    btn5.textContent = '✓ Färdig';
+                                    btn5.disabled = true;
+                                }
+                                if (btn7) {
+                                    btn7.textContent = '✓ Färdig';
+                                    btn7.disabled = true;
+                                }
+                            }
+                        }
+                    }
                 }
             });
         }
@@ -977,6 +1057,40 @@
             localStorage.setItem('currentSession', JSON.stringify(sessionData));
             startSessionTimer();
             updateCompleteButton();
+            
+            // If checked, stop the timer and disable buttons
+            if (checked && (activity === 'warmup' || activity === 'cardio')) {
+                // Stop any running timer
+                if (activityTimers[activity] && activityTimers[activity].interval) {
+                    clearInterval(activityTimers[activity].interval);
+                    activityTimers[activity] = null;
+                }
+                
+                // Hide timer display
+                const display = document.getElementById(activity + '-timer-display');
+                if (display) {
+                    display.style.display = 'none';
+                }
+                
+                // Disable and reset buttons
+                if (activity === 'warmup') {
+                    const btn = document.getElementById('warmup-timer-btn');
+                    btn.textContent = '✓ Färdig';
+                    btn.disabled = true;
+                } else if (activity === 'cardio') {
+                    const btn5 = document.getElementById('cardio-timer-btn-5');
+                    const btn7 = document.getElementById('cardio-timer-btn-7');
+                    btn5.textContent = '✓ Färdig';
+                    btn7.textContent = '✓ Färdig';
+                    btn5.disabled = true;
+                    btn7.disabled = true;
+                }
+            }
+            
+            // If unchecked, re-enable buttons
+            if (!checked && (activity === 'warmup' || activity === 'cardio')) {
+                resetActivityTimerButtons(activity);
+            }
         }
 
         // Start session timer (only once per session)
@@ -1183,6 +1297,9 @@
                 if (checkbox) checkbox.checked = false;
             });
 
+            // Reset activity timers
+            resetActivityTimers();
+
             updateCompleteButton();
 
             // Show confirmation
@@ -1275,13 +1392,13 @@
                 }
             }, 1000);
 
-            document.querySelector('.timer-btn.start').textContent = '⏸️ Pausa';
+            document.getElementById('rest-timer-btn').textContent = '⏸️ Pausa';
         }
 
         function pauseTimer() {
             clearInterval(timerInterval);
             timerInterval = null;
-            document.querySelector('.timer-btn.start').textContent = '▶️ Fortsätt';
+            document.getElementById('rest-timer-btn').textContent = '▶️ Fortsätt';
         }
 
         function resetTimer() {
@@ -1289,7 +1406,7 @@
             timerInterval = null;
             timeLeft = 45;
             updateTimerDisplay();
-            document.querySelector('.timer-btn.start').textContent = '▶️ Starta vila';
+            document.getElementById('rest-timer-btn').textContent = '▶️ Starta vila';
         }
 
         function updateTimerDisplay() {
@@ -1300,22 +1417,176 @@
         }
 
         function playSound() {
-            // Create a simple beep sound using Web Audio API
-            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            const oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
+            // Vibrate phone (works even in silent mode)
+            if (navigator.vibrate) {
+                navigator.vibrate([200, 100, 200, 100, 200]); // Vibrate pattern: 200ms, pause 100ms, repeat
+            }
+            
+            // Create a simple beep sound using Web Audio API (for when sound is on)
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
 
-            oscillator.connect(gainNode);
-            gainNode.connect(audioContext.destination);
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
 
-            oscillator.frequency.value = 800;
-            oscillator.type = 'sine';
+                oscillator.frequency.value = 800;
+                oscillator.type = 'sine';
 
-            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
 
-            oscillator.start(audioContext.currentTime);
-            oscillator.stop(audioContext.currentTime + 0.5);
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.5);
+            } catch (e) {
+                // Audio context might fail, but vibration should still work
+                console.log('Audio not available');
+            }
+        }
+
+        // Activity timer functions
+        function startActivityTimer(activity, duration) {
+            // If timer is running, pause it
+            if (activityTimers[activity] && activityTimers[activity].interval) {
+                pauseActivityTimer(activity);
+                return;
+            }
+
+            // Show timer display
+            const display = document.getElementById(activity + '-timer-display');
+            display.style.display = 'block';
+
+            // Initialize timer data if not exists or completed
+            if (!activityTimers[activity] || activityTimers[activity].timeLeft === 0) {
+                activityTimers[activity] = {
+                    timeLeft: duration,
+                    interval: null,
+                    initialDuration: duration
+                };
+            }
+
+            // Update display
+            updateActivityTimerDisplay(activity);
+
+            // Start countdown
+            activityTimers[activity].interval = setInterval(() => {
+                activityTimers[activity].timeLeft--;
+                updateActivityTimerDisplay(activity);
+
+                if (activityTimers[activity].timeLeft <= 0) {
+                    // Timer finished
+                    clearInterval(activityTimers[activity].interval);
+                    activityTimers[activity].interval = null;
+                    
+                    // Mark as complete
+                    const checkbox = document.getElementById(activity + '-done');
+                    if (checkbox && !checkbox.checked) {
+                        checkbox.checked = true;
+                        saveActivityCompletion(activity, true);
+                    }
+                    
+                    // Play sound and show alert
+                    playSound();
+                    setTimeout(() => {
+                        alert(`✅ ${activity === 'warmup' ? 'Uppvärmning' : 'Konditionsavslut'} klar!`);
+                        display.style.display = 'none';
+                        // Don't reset buttons - they're already disabled by saveActivityCompletion
+                    }, 100);
+                }
+            }, 1000);
+
+            // Update button text to show pause option
+            updateActivityTimerButtons(activity, true);
+        }
+
+        function pauseActivityTimer(activity) {
+            if (!activityTimers[activity]) return;
+            
+            // Stop the interval
+            if (activityTimers[activity].interval) {
+                clearInterval(activityTimers[activity].interval);
+                activityTimers[activity].interval = null;
+            }
+
+            // Update button text to show resume option
+            updateActivityTimerButtons(activity, false);
+        }
+
+        function updateActivityTimerButtons(activity, isRunning) {
+            if (activity === 'warmup') {
+                const btn = document.getElementById('warmup-timer-btn');
+                btn.textContent = isRunning ? '⏸️ Pausa' : '▶️ Fortsätt';
+                btn.disabled = false;
+            } else if (activity === 'cardio') {
+                const btn5 = document.getElementById('cardio-timer-btn-5');
+                const btn7 = document.getElementById('cardio-timer-btn-7');
+                
+                // Only update the button that was clicked
+                if (activityTimers[activity] && activityTimers[activity].initialDuration === 300) {
+                    btn5.textContent = isRunning ? '⏸️ Pausa' : '▶️ Fortsätt';
+                    btn5.disabled = false;
+                    btn7.disabled = true;
+                } else if (activityTimers[activity] && activityTimers[activity].initialDuration === 420) {
+                    btn7.textContent = isRunning ? '⏸️ Pausa' : '▶️ Fortsätt';
+                    btn7.disabled = false;
+                    btn5.disabled = true;
+                }
+            }
+        }
+
+        function resetActivityTimerButtons(activity) {
+            if (activity === 'warmup') {
+                const btn = document.getElementById('warmup-timer-btn');
+                btn.textContent = '▶️ Starta 5 min';
+                btn.disabled = false;
+            } else if (activity === 'cardio') {
+                const btn5 = document.getElementById('cardio-timer-btn-5');
+                const btn7 = document.getElementById('cardio-timer-btn-7');
+                btn5.textContent = '▶️ 5 min';
+                btn7.textContent = '▶️ 7 min';
+                btn5.disabled = false;
+                btn7.disabled = false;
+            }
+        }
+
+        function updateActivityTimerDisplay(activity) {
+            if (!activityTimers[activity]) return;
+
+            const timeLeft = activityTimers[activity].timeLeft;
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            
+            const valueElement = document.getElementById(activity + '-timer-value');
+            const displayElement = document.getElementById(activity + '-timer-display').querySelector('.activity-timer-text');
+            
+            valueElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            
+            // Change color based on time left
+            displayElement.classList.remove('warning', 'danger');
+            if (timeLeft <= 30) {
+                displayElement.classList.add('danger');
+            } else if (timeLeft <= 60) {
+                displayElement.classList.add('warning');
+            }
+        }
+
+        function resetActivityTimers() {
+            // Clear all activity timers
+            for (let activity in activityTimers) {
+                if (activityTimers[activity]) {
+                    clearInterval(activityTimers[activity].interval);
+                    activityTimers[activity] = null;
+                }
+            }
+            
+            // Hide displays
+            document.getElementById('warmup-timer-display').style.display = 'none';
+            document.getElementById('cardio-timer-display').style.display = 'none';
+            
+            // Reset buttons
+            resetActivityTimerButtons('warmup');
+            resetActivityTimerButtons('cardio');
         }
 
         // Initialize app on load
