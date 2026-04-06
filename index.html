@@ -45,12 +45,8 @@
             background: var(--bg-primary);
             color: var(--text-primary);
             line-height: 1.5;
-            padding-bottom: 140px;
-            transition: background 0.3s, color 0.3s;
-        }
-
-        body.no-timer {
             padding-bottom: 10px;
+            transition: background 0.3s, color 0.3s;
         }
 
         .header {
@@ -503,37 +499,68 @@
             line-height: 1.5;
         }
 
-        .timer-section {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: var(--bg-card);
-            padding: 10px 15px;
-            border-top: 1px solid var(--border);
-            box-shadow: 0 -2px 10px var(--shadow);
-            z-index: 100;
-        }
-
-        .timer-section.hidden {
+        /* Inline Rest Timer */
+        .rest-timer-container {
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            padding: 12px;
+            margin-top: 10px;
             display: none;
         }
 
-        .timer-display {
-            font-size: 28px;
+        .rest-timer-container.active {
+            display: block;
+        }
+
+        .rest-timer-display {
+            font-size: 24px;
             font-weight: 700;
             text-align: center;
             color: var(--accent);
             margin-bottom: 8px;
         }
 
-        .timer-buttons {
+        .rest-timer-display.warning {
+            color: #ff9500;
+        }
+
+        .rest-timer-display.done {
+            color: var(--success);
+        }
+
+        .rest-timer-buttons {
             display: flex;
             gap: 8px;
         }
 
-        .timer-btn {
+        .rest-timer-btn {
             flex: 1;
+            padding: 12px 10px;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .rest-timer-btn:active {
+            transform: scale(0.98);
+        }
+
+        .rest-timer-btn.pause {
+            background: var(--accent);
+            color: white;
+        }
+
+        .rest-timer-btn.skip {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        /* Activity timer buttons and reset buttons */
+        .timer-btn {
             padding: 12px;
             border: none;
             border-radius: 10px;
@@ -543,13 +570,13 @@
             transition: all 0.2s;
         }
 
+        .timer-btn:active {
+            transform: scale(0.98);
+        }
+
         .timer-btn.start {
             background: var(--accent);
             color: white;
-        }
-
-        .timer-btn.start:active {
-            background: var(--accent-hover);
         }
 
         .timer-btn.reset {
@@ -1153,6 +1180,16 @@
                                 <button class="set-button" id="benpress-set-btn" onclick="completeSet('benpress')">
                                     ✓ Markera set som klart
                                 </button>
+                                
+                                <!-- Rest Timer -->
+                                <div class="rest-timer-container" id="benpress-rest-timer">
+                                    <div class="rest-timer-display" id="benpress-rest-display">⏱️ 0:45</div>
+                                    <div class="rest-timer-buttons">
+                                        <button class="rest-timer-btn pause" id="benpress-rest-pause" onclick="pauseRestTimer('benpress')">⏸️ Pausa</button>
+                                        <button class="rest-timer-btn skip" onclick="skipRestTimer('benpress')">⏭️ Hoppa över</button>
+                                    </div>
+                                </div>
+                                
                                 <button class="timer-btn reset" onclick="resetSetCounter('benpress')" style="margin-top: 5px;">
                                     🔄 Återställ set
                                 </button>
@@ -1208,6 +1245,16 @@
                                 <button class="set-button" id="benstrack-set-btn" onclick="completeSet('benstrack')">
                                     ✓ Markera set som klart
                                 </button>
+                                
+                                <!-- Rest Timer -->
+                                <div class="rest-timer-container" id="benstrack-rest-timer">
+                                    <div class="rest-timer-display" id="benstrack-rest-display">⏱️ 0:45</div>
+                                    <div class="rest-timer-buttons">
+                                        <button class="rest-timer-btn pause" id="benstrack-rest-pause" onclick="pauseRestTimer('benstrack')">⏸️ Pausa</button>
+                                        <button class="rest-timer-btn skip" onclick="skipRestTimer('benstrack')">⏭️ Hoppa över</button>
+                                    </div>
+                                </div>
+                                
                                 <button class="timer-btn reset" onclick="resetSetCounter('benstrack')" style="margin-top: 5px;">
                                     🔄 Återställ set
                                 </button>
@@ -1263,6 +1310,16 @@
                                 <button class="set-button" id="larcurl-set-btn" onclick="completeSet('larcurl')">
                                     ✓ Markera set som klart
                                 </button>
+                                
+                                <!-- Rest Timer -->
+                                <div class="rest-timer-container" id="larcurl-rest-timer">
+                                    <div class="rest-timer-display" id="larcurl-rest-display">⏱️ 0:45</div>
+                                    <div class="rest-timer-buttons">
+                                        <button class="rest-timer-btn pause" id="larcurl-rest-pause" onclick="pauseRestTimer('larcurl')">⏸️ Pausa</button>
+                                        <button class="rest-timer-btn skip" onclick="skipRestTimer('larcurl')">⏭️ Hoppa över</button>
+                                    </div>
+                                </div>
+                                
                                 <button class="timer-btn reset" onclick="resetSetCounter('larcurl')" style="margin-top: 5px;">
                                     🔄 Återställ set
                                 </button>
@@ -1317,6 +1374,16 @@
                                 <button class="set-button" id="rodd-set-btn" onclick="completeSet('rodd')">
                                     ✓ Markera set som klart
                                 </button>
+                                
+                                <!-- Rest Timer -->
+                                <div class="rest-timer-container" id="rodd-rest-timer">
+                                    <div class="rest-timer-display" id="rodd-rest-display">⏱️ 0:45</div>
+                                    <div class="rest-timer-buttons">
+                                        <button class="rest-timer-btn pause" id="rodd-rest-pause" onclick="pauseRestTimer('rodd')">⏸️ Pausa</button>
+                                        <button class="rest-timer-btn skip" onclick="skipRestTimer('rodd')">⏭️ Hoppa över</button>
+                                    </div>
+                                </div>
+                                
                                 <button class="timer-btn reset" onclick="resetSetCounter('rodd')" style="margin-top: 5px;">
                                     🔄 Återställ set
                                 </button>
@@ -1372,6 +1439,16 @@
                                 <button class="set-button" id="brostpress-set-btn" onclick="completeSet('brostpress')">
                                     ✓ Markera set som klart
                                 </button>
+                                
+                                <!-- Rest Timer -->
+                                <div class="rest-timer-container" id="brostpress-rest-timer">
+                                    <div class="rest-timer-display" id="brostpress-rest-display">⏱️ 0:45</div>
+                                    <div class="rest-timer-buttons">
+                                        <button class="rest-timer-btn pause" id="brostpress-rest-pause" onclick="pauseRestTimer('brostpress')">⏸️ Pausa</button>
+                                        <button class="rest-timer-btn skip" onclick="skipRestTimer('brostpress')">⏭️ Hoppa över</button>
+                                    </div>
+                                </div>
+                                
                                 <button class="timer-btn reset" onclick="resetSetCounter('brostpress')" style="margin-top: 5px;">
                                     🔄 Återställ set
                                 </button>
@@ -1427,6 +1504,16 @@
                                 <button class="set-button" id="axelpress-set-btn" onclick="completeSet('axelpress')">
                                     ✓ Markera set som klart
                                 </button>
+                                
+                                <!-- Rest Timer -->
+                                <div class="rest-timer-container" id="axelpress-rest-timer">
+                                    <div class="rest-timer-display" id="axelpress-rest-display">⏱️ 0:45</div>
+                                    <div class="rest-timer-buttons">
+                                        <button class="rest-timer-btn pause" id="axelpress-rest-pause" onclick="pauseRestTimer('axelpress')">⏸️ Pausa</button>
+                                        <button class="rest-timer-btn skip" onclick="skipRestTimer('axelpress')">⏭️ Hoppa över</button>
+                                    </div>
+                                </div>
+                                
                                 <button class="timer-btn reset" onclick="resetSetCounter('axelpress')" style="margin-top: 5px;">
                                     🔄 Återställ set
                                 </button>
@@ -1482,6 +1569,16 @@
                                 <button class="set-button" id="plank-set-btn" onclick="completeSet('plank')">
                                     ✓ Markera set som klart
                                 </button>
+                                
+                                <!-- Rest Timer -->
+                                <div class="rest-timer-container" id="plank-rest-timer">
+                                    <div class="rest-timer-display" id="plank-rest-display">⏱️ 0:45</div>
+                                    <div class="rest-timer-buttons">
+                                        <button class="rest-timer-btn pause" id="plank-rest-pause" onclick="pauseRestTimer('plank')">⏸️ Pausa</button>
+                                        <button class="rest-timer-btn skip" onclick="skipRestTimer('plank')">⏭️ Hoppa över</button>
+                                    </div>
+                                </div>
+                                
                                 <button class="timer-btn reset" onclick="resetSetCounter('plank')" style="margin-top: 5px;">
                                     🔄 Återställ set
                                 </button>
@@ -1583,19 +1680,10 @@
         </div>
     </div>
 
-    <!-- Timer -->
-    <div class="timer-section">
-        <div class="timer-display" id="timer-display">0:45</div>
-        <div class="timer-buttons">
-            <button class="timer-btn start" id="rest-timer-btn" onclick="startTimer()">▶️ Starta vila</button>
-            <button class="timer-btn reset" onclick="resetTimer()">🔄 Återställ</button>
-        </div>
-    </div>
-
     <script>
-        let timerInterval = null;
-        let timeLeft = 45;
         let activityTimers = {}; // Store activity timer intervals
+        let restTimers = {}; // Store rest timer intervals per exercise
+        let restTimerTimeouts = {}; // Store setTimeout IDs for hiding timers
         const exercises = ['benpress', 'benstrack', 'larcurl', 'rodd', 'brostpress', 'axelpress', 'plank'];
         const activities = ['warmup', 'cardio', 'stretch'];
         const stretchExercises = ['framsida', 'baksida', 'rumpa', 'brost', 'axlar', 'rygg'];
@@ -1864,21 +1952,16 @@
             // Show selected section
             document.getElementById(tabName).classList.add('active');
 
-            // Show/hide timer and navigation based on tab
-            const timerSection = document.querySelector('.timer-section');
+            // Show/hide progress bar based on tab
             const progressBar = document.querySelector('.progress-bar-container');
             
             if (tabName === 'workout') {
-                timerSection.classList.remove('hidden');
                 if (progressBar) progressBar.style.display = 'block';
-                document.body.classList.remove('no-timer');
                 // Show workout menu item
                 const workoutMenuItem = document.getElementById('menu-workout');
                 if (workoutMenuItem) workoutMenuItem.style.display = 'block';
             } else {
-                timerSection.classList.add('hidden');
                 if (progressBar) progressBar.style.display = 'none';
-                document.body.classList.add('no-timer');
             }
 
             if (tabName === 'history') {
@@ -2001,6 +2084,177 @@
             startSessionTimer();
             updateCompleteButton();
             updateProgressBar();
+            
+            // Always start rest timer after completing a set
+            startRestTimer(exercise);
+        }
+        
+        // Start rest timer for an exercise
+        function startRestTimer(exercise) {
+            // Stop any existing timer for this exercise
+            if (restTimers[exercise]) {
+                clearInterval(restTimers[exercise].interval);
+            }
+            
+            // Clear any pending timeout to hide timer
+            if (restTimerTimeouts[exercise]) {
+                clearTimeout(restTimerTimeouts[exercise]);
+                restTimerTimeouts[exercise] = null;
+            }
+            
+            // Initialize timer
+            restTimers[exercise] = {
+                timeLeft: 45,
+                interval: null
+            };
+            
+            // Get DOM elements
+            const timerContainer = document.getElementById(exercise + '-rest-timer');
+            const timerDisplay = document.getElementById(exercise + '-rest-display');
+            const pauseBtn = document.getElementById(exercise + '-rest-pause');
+            
+            // Reset and show timer container
+            if (timerContainer) {
+                timerContainer.classList.add('active');
+            }
+            
+            if (timerDisplay) {
+                timerDisplay.classList.remove('warning', 'done');
+                timerDisplay.textContent = '⏱️ 0:45'; // Reset display text
+            }
+            
+            if (pauseBtn) {
+                pauseBtn.textContent = '⏸️ Pausa';
+            }
+            
+            // Update display
+            updateRestTimerDisplay(exercise);
+            
+            // Start countdown
+            restTimers[exercise].interval = setInterval(() => {
+                // Check if timer still exists (might have been reset)
+                if (!restTimers[exercise]) {
+                    return;
+                }
+                
+                restTimers[exercise].timeLeft--;
+                updateRestTimerDisplay(exercise);
+                
+                if (restTimers[exercise].timeLeft <= 0) {
+                    // Timer finished
+                    const intervalId = restTimers[exercise].interval;
+                    
+                    // Play sound and vibrate
+                    playSound();
+                    
+                    // Update display
+                    if (timerDisplay) {
+                        timerDisplay.textContent = '✅ Vila klar!';
+                        timerDisplay.classList.add('done');
+                    }
+                    
+                    // Clean up timer object
+                    restTimers[exercise] = null;
+                    clearInterval(intervalId);
+                    
+                    // Hide timer after 3 seconds
+                    restTimerTimeouts[exercise] = setTimeout(() => {
+                        if (timerContainer) {
+                            timerContainer.classList.remove('active');
+                        }
+                        restTimerTimeouts[exercise] = null;
+                    }, 3000);
+                }
+            }, 1000);
+            
+            if (pauseBtn) {
+                pauseBtn.textContent = '⏸️ Pausa';
+            }
+        }
+        
+        // Update rest timer display
+        function updateRestTimerDisplay(exercise) {
+            if (!restTimers[exercise]) return;
+            
+            const timeLeft = restTimers[exercise].timeLeft;
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            
+            const timerDisplay = document.getElementById(exercise + '-rest-display');
+            if (timerDisplay) {
+                timerDisplay.textContent = `⏱️ ${minutes}:${seconds.toString().padStart(2, '0')}`;
+                
+                // Change color based on time left
+                timerDisplay.classList.remove('warning', 'done');
+                if (timeLeft <= 10) {
+                    timerDisplay.classList.add('warning');
+                }
+            }
+        }
+        
+        // Pause rest timer
+        function pauseRestTimer(exercise) {
+            if (!restTimers[exercise]) return;
+            
+            const pauseBtn = document.getElementById(exercise + '-rest-pause');
+            
+            if (restTimers[exercise].interval) {
+                // Currently running - pause it
+                clearInterval(restTimers[exercise].interval);
+                restTimers[exercise].interval = null;
+                if (pauseBtn) pauseBtn.textContent = '▶️ Fortsätt';
+            } else {
+                // Currently paused - resume it
+                restTimers[exercise].interval = setInterval(() => {
+                    // Check if timer still exists (might have been reset)
+                    if (!restTimers[exercise]) {
+                        return;
+                    }
+                    
+                    restTimers[exercise].timeLeft--;
+                    updateRestTimerDisplay(exercise);
+                    
+                    if (restTimers[exercise].timeLeft <= 0) {
+                        const intervalId = restTimers[exercise].interval;
+                        
+                        playSound();
+                        
+                        const timerDisplay = document.getElementById(exercise + '-rest-display');
+                        if (timerDisplay) {
+                            timerDisplay.textContent = '✅ Vila klar!';
+                            timerDisplay.classList.add('done');
+                        }
+                        
+                        const timerContainer = document.getElementById(exercise + '-rest-timer');
+                        
+                        // Clean up timer object
+                        restTimers[exercise] = null;
+                        clearInterval(intervalId);
+                        
+                        restTimerTimeouts[exercise] = setTimeout(() => {
+                            if (timerContainer) {
+                                timerContainer.classList.remove('active');
+                            }
+                            restTimerTimeouts[exercise] = null;
+                        }, 3000);
+                    }
+                }, 1000);
+                
+                if (pauseBtn) pauseBtn.textContent = '⏸️ Pausa';
+            }
+        }
+        
+        // Skip rest timer
+        function skipRestTimer(exercise) {
+            if (restTimers[exercise]) {
+                clearInterval(restTimers[exercise].interval);
+                restTimers[exercise] = null;
+            }
+            
+            const timerContainer = document.getElementById(exercise + '-rest-timer');
+            if (timerContainer) {
+                timerContainer.classList.remove('active');
+            }
         }
         
         // Update set counter display
@@ -2049,6 +2303,9 @@
                 updateCompleteButton();
                 updateProgressBar();
             }
+            
+            // Also stop and hide any running rest timer
+            skipRestTimer(exercise);
         }
 
         // Save activity completion
@@ -2237,6 +2494,11 @@
             localStorage.removeItem('currentSession');
             localStorage.removeItem('sessionStartTime');
             
+            // Stop all rest timers
+            exercises.forEach(exercise => {
+                skipRestTimer(exercise);
+            });
+            
             // Reset all set counters
             exercises.forEach(exercise => {
                 updateSetCounter(exercise);
@@ -2396,6 +2658,11 @@
             localStorage.removeItem('sessionStartTime');
             localStorage.removeItem('currentSlide');
             
+            // Stop all rest timers
+            exercises.forEach(exercise => {
+                skipRestTimer(exercise);
+            });
+            
             // Reset all counters
             exercises.forEach(exercise => {
                 updateSetCounter(exercise);
@@ -2512,50 +2779,7 @@
             }
         }
 
-        // Timer functions
-        function startTimer() {
-            if (timerInterval) {
-                pauseTimer();
-                return;
-            }
-
-            timerInterval = setInterval(() => {
-                timeLeft--;
-                updateTimerDisplay();
-
-                if (timeLeft <= 0) {
-                    clearInterval(timerInterval);
-                    timerInterval = null;
-                    playSound();
-                    alert('⏰ Vilotiden är slut!');
-                    resetTimer();
-                }
-            }, 1000);
-
-            document.getElementById('rest-timer-btn').textContent = '⏸️ Pausa';
-        }
-
-        function pauseTimer() {
-            clearInterval(timerInterval);
-            timerInterval = null;
-            document.getElementById('rest-timer-btn').textContent = '▶️ Fortsätt';
-        }
-
-        function resetTimer() {
-            clearInterval(timerInterval);
-            timerInterval = null;
-            timeLeft = 45;
-            updateTimerDisplay();
-            document.getElementById('rest-timer-btn').textContent = '▶️ Starta vila';
-        }
-
-        function updateTimerDisplay() {
-            const minutes = Math.floor(timeLeft / 60);
-            const seconds = timeLeft % 60;
-            document.getElementById('timer-display').textContent = 
-                `${minutes}:${seconds.toString().padStart(2, '0')}`;
-        }
-
+        // Play sound and vibrate
         function playSound() {
             // Vibrate phone (works even in silent mode)
             if (navigator.vibrate) {
