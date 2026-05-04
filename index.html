@@ -1024,6 +1024,9 @@
         <button class="menu-item" id="menu-home" onclick="menuShowTab('home')">🏠 Hem</button>
         <button class="menu-item" id="menu-workout" onclick="menuShowTab('workout')" style="display: none;">🏋️ Träning</button>
         <button class="menu-item" id="menu-history" onclick="menuShowTab('history')">📊 Historik</button>
+        <hr style="border: none; border-top: 1px solid var(--border); margin: 10px 0;">
+        <button class="menu-item" onclick="exportData()">📤 Exportera data</button>
+        <button class="menu-item" onclick="importData()">📥 Importera data</button>
     </div>
 
     <div class="header">
@@ -1681,6 +1684,98 @@
     </div>
 
     <script>
+        // IndexedDB setup
+        let db = null;
+        const DB_NAME = 'TrainingAppDB';
+        const DB_VERSION = 1;
+        
+        // Initialize IndexedDB
+        function initDB() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open(DB_NAME, DB_VERSION);
+                
+                request.onerror = () => reject(request.error);
+                request.onsuccess = () => {
+                    db = request.result;
+                    resolve(db);
+                };
+                
+                request.onupgradeneeded = (event) => {
+                    const db = event.target.result;
+                    
+                    // Create workouts store
+                    if (!db.objectStoreNames.contains('workouts')) {
+                        const workoutStore = db.createObjectStore('workouts', { keyPath: 'id', autoIncrement: true });
+                        workoutStore.createIndex('timestamp', 'timestamp', { unique: false });
+                        workoutStore.createIndex('date', 'date', { unique: false });
+                    }
+                    
+                    // Create settings store
+                    if (!db.objectStoreNames.contains('settings')) {
+                        db.createObjectStore('settings', { keyPath: 'key' });
+                    }
+                };
+            });
+        }
+        
+        // Save workout to IndexedDB
+        function saveWorkoutToDB(workout) {
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction(['workouts'], 'readwrite');
+                const store = transaction.objectStore('workouts');
+                const request = store.add(workout);
+                
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = () => reject(request.error);
+            });
+        }
+        
+        // Get all workouts from IndexedDB
+        function getAllWorkouts() {
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction(['workouts'], 'readonly');
+                const store = transaction.objectStore('workouts');
+                const request = store.getAll();
+                
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = () => reject(request.error);
+            });
+        }
+        
+        // Delete all workouts (for clearing history)
+        function clearAllWorkouts() {
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction(['workouts'], 'readwrite');
+                const store = transaction.objectStore('workouts');
+                const request = store.clear();
+                
+                request.onsuccess = () => resolve();
+                request.onerror = () => reject(request.error);
+            });
+        }
+        
+        // Migrate from localStorage to IndexedDB (one-time)
+        async function migrateFromLocalStorage() {
+            const migrated = localStorage.getItem('migratedToIndexedDB');
+            if (migrated) return; // Already migrated
+            
+            const history = JSON.parse(localStorage.getItem('workoutHistory') || '[]');
+            if (history.length === 0) {
+                localStorage.setItem('migratedToIndexedDB', 'true');
+                return;
+            }
+            
+            try {
+                for (const workout of history) {
+                    await saveWorkoutToDB(workout);
+                }
+                localStorage.setItem('migratedToIndexedDB', 'true');
+                console.log(`Migrated ${history.length} workouts to IndexedDB`);
+            } catch (error) {
+                console.error('Migration failed:', error);
+            }
+        }
+        
         let activityTimers = {}; // Store activity timer intervals
         let restTimers = {}; // Store rest timer intervals per exercise
         let restTimerTimeouts = {}; // Store setTimeout IDs for hiding timers
@@ -1695,10 +1790,19 @@
         const slideKeys = ['warmup', 'benpress', 'benstrack', 'larcurl', 'rodd', 'brostpress', 'axelpress', 'plank', 'cardio', 'stretch'];
 
         // Initialize app
-        function initApp() {
+        async function initApp() {
+            // Initialize IndexedDB first
+            try {
+                await initDB();
+                // Migrate localStorage history to IndexedDB if needed
+                await migrateFromLocalStorage();
+            } catch (error) {
+                console.error('Failed to initialize database:', error);
+            }
+            
             loadTheme();
             loadExerciseData();
-            loadHistory();
+            await loadHistory();
             
             // Check if we should show summary or home
             const lastCompleted = localStorage.getItem('lastCompletedSession');
@@ -2089,7 +2193,7 @@
             startRestTimer(exercise);
         }
         
-        // Start rest timer for an exercise
+        // Start rest timer for an exercise (timestamp-based)
         function startRestTimer(exercise) {
             // Stop any existing timer for this exercise
             if (restTimers[exercise]) {
@@ -2102,10 +2206,13 @@
                 restTimerTimeouts[exercise] = null;
             }
             
-            // Initialize timer
+            // Initialize timer with end timestamp
+            const restDuration = 45000; // 45 seconds in milliseconds
             restTimers[exercise] = {
-                timeLeft: 45,
-                interval: null
+                endTime: Date.now() + restDuration,
+                interval: null,
+                paused: false,
+                pausedTimeLeft: 0
             };
             
             // Get DOM elements
@@ -2127,7 +2234,7 @@
                 pauseBtn.textContent = '⏸️ Pausa';
             }
             
-            // Update display
+            // Update display immediately
             updateRestTimerDisplay(exercise);
             
             // Start countdown
@@ -2137,10 +2244,12 @@
                     return;
                 }
                 
-                restTimers[exercise].timeLeft--;
                 updateRestTimerDisplay(exercise);
                 
-                if (restTimers[exercise].timeLeft <= 0) {
+                // Calculate remaining time
+                const timeLeft = Math.ceil((restTimers[exercise].endTime - Date.now()) / 1000);
+                
+                if (timeLeft <= 0) {
                     // Timer finished
                     const intervalId = restTimers[exercise].interval;
                     
@@ -2165,18 +2274,25 @@
                         restTimerTimeouts[exercise] = null;
                     }, 3000);
                 }
-            }, 1000);
+            }, 100); // Update every 100ms for smoother countdown
             
             if (pauseBtn) {
                 pauseBtn.textContent = '⏸️ Pausa';
             }
         }
         
-        // Update rest timer display
+        // Update rest timer display (timestamp-based)
         function updateRestTimerDisplay(exercise) {
             if (!restTimers[exercise]) return;
             
-            const timeLeft = restTimers[exercise].timeLeft;
+            let timeLeft;
+            if (restTimers[exercise].paused) {
+                timeLeft = restTimers[exercise].pausedTimeLeft;
+            } else {
+                timeLeft = Math.ceil((restTimers[exercise].endTime - Date.now()) / 1000);
+                if (timeLeft < 0) timeLeft = 0;
+            }
+            
             const minutes = Math.floor(timeLeft / 60);
             const seconds = timeLeft % 60;
             
@@ -2192,29 +2308,38 @@
             }
         }
         
-        // Pause rest timer
+        // Pause rest timer (timestamp-based)
         function pauseRestTimer(exercise) {
             if (!restTimers[exercise]) return;
             
             const pauseBtn = document.getElementById(exercise + '-rest-pause');
             
-            if (restTimers[exercise].interval) {
+            if (!restTimers[exercise].paused) {
                 // Currently running - pause it
-                clearInterval(restTimers[exercise].interval);
-                restTimers[exercise].interval = null;
+                restTimers[exercise].paused = true;
+                restTimers[exercise].pausedTimeLeft = Math.ceil((restTimers[exercise].endTime - Date.now()) / 1000);
+                if (restTimers[exercise].interval) {
+                    clearInterval(restTimers[exercise].interval);
+                    restTimers[exercise].interval = null;
+                }
                 if (pauseBtn) pauseBtn.textContent = '▶️ Fortsätt';
+                updateRestTimerDisplay(exercise);
             } else {
                 // Currently paused - resume it
+                restTimers[exercise].paused = false;
+                restTimers[exercise].endTime = Date.now() + (restTimers[exercise].pausedTimeLeft * 1000);
+                
                 restTimers[exercise].interval = setInterval(() => {
                     // Check if timer still exists (might have been reset)
                     if (!restTimers[exercise]) {
                         return;
                     }
                     
-                    restTimers[exercise].timeLeft--;
                     updateRestTimerDisplay(exercise);
                     
-                    if (restTimers[exercise].timeLeft <= 0) {
+                    const timeLeft = Math.ceil((restTimers[exercise].endTime - Date.now()) / 1000);
+                    
+                    if (timeLeft <= 0) {
                         const intervalId = restTimers[exercise].interval;
                         
                         playSound();
@@ -2238,7 +2363,7 @@
                             restTimerTimeouts[exercise] = null;
                         }, 3000);
                     }
-                }, 1000);
+                }, 100); // Update every 100ms for smoother countdown
                 
                 if (pauseBtn) pauseBtn.textContent = '⏸️ Pausa';
             }
@@ -2417,7 +2542,7 @@
         }
 
         // Complete workout
-        function completeWorkout() {
+        async function completeWorkout() {
             const sessionData = JSON.parse(localStorage.getItem('currentSession') || '{}');
             const sessionStartTime = localStorage.getItem('sessionStartTime');
             
@@ -2430,8 +2555,7 @@
             const duration = Date.now() - parseInt(sessionStartTime);
             const durationMinutes = Math.round(duration / 60000);
 
-            // Save to history
-            const history = JSON.parse(localStorage.getItem('workoutHistory') || '[]');
+            // Prepare workout log
             const now = new Date();
             const dateStr = now.toLocaleDateString('sv-SE', { 
                 weekday: 'long', 
@@ -2479,15 +2603,16 @@
                 }
             });
 
-            history.unshift(workoutLog);
-            
-            if (history.length > 20) {
-                history.length = 20;
+            // Save to IndexedDB
+            try {
+                await saveWorkoutToDB(workoutLog);
+            } catch (error) {
+                console.error('Failed to save workout:', error);
+                alert('Kunde inte spara träningspasset. Försök igen.');
+                return;
             }
 
-            localStorage.setItem('workoutHistory', JSON.stringify(history));
-
-            // Save for summary display
+            // Save for summary display (temporary)
             localStorage.setItem('lastCompletedSession', JSON.stringify(workoutLog));
 
             // Clear session
@@ -2518,7 +2643,8 @@
             updateCompleteButton();
             updateProgressBar();
 
-            // Show summary instead of alert
+            // Reload history and show summary
+            await loadHistory();
             showSummary(workoutLog);
         }
 
@@ -2566,8 +2692,14 @@
         }
 
         // Build home screen
-        function buildHomeScreen() {
-            const history = JSON.parse(localStorage.getItem('workoutHistory') || '[]');
+        async function buildHomeScreen() {
+            let history = [];
+            try {
+                history = await getAllWorkouts();
+                history.sort((a, b) => b.timestamp - a.timestamp);
+            } catch (error) {
+                console.error('Failed to load workouts:', error);
+            }
             
             // Check for active session
             const sessionData = JSON.parse(localStorage.getItem('currentSession') || '{}');
@@ -2714,8 +2846,17 @@
         }
 
         // Load history
-        function loadHistory() {
-            const history = JSON.parse(localStorage.getItem('workoutHistory') || '[]');
+        async function loadHistory() {
+            let history = [];
+            
+            try {
+                history = await getAllWorkouts();
+                // Sort by timestamp descending (newest first)
+                history.sort((a, b) => b.timestamp - a.timestamp);
+            } catch (error) {
+                console.error('Failed to load history:', error);
+            }
+            
             const historyContent = document.getElementById('history-content');
 
             if (history.length === 0) {
@@ -2772,11 +2913,101 @@
             return names[exercise] || exercise;
         }
 
-        function clearHistory() {
+        async function clearHistory() {
             if (confirm('Är du säker på att du vill radera all träningshistorik?')) {
-                localStorage.setItem('workoutHistory', '[]');
-                loadHistory();
+                try {
+                    await clearAllWorkouts();
+                    await loadHistory();
+                } catch (error) {
+                    console.error('Failed to clear history:', error);
+                    alert('Kunde inte rensa historiken. Försök igen.');
+                }
             }
+        }
+
+        // Export all workout data to JSON file
+        async function exportData() {
+            try {
+                const workouts = await getAllWorkouts();
+                
+                const exportData = {
+                    version: 1,
+                    exportDate: new Date().toISOString(),
+                    workouts: workouts
+                };
+                
+                const dataStr = JSON.stringify(exportData, null, 2);
+                const dataBlob = new Blob([dataStr], { type: 'application/json' });
+                const url = URL.createObjectURL(dataBlob);
+                
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `traningshistorik-${new Date().toISOString().split('T')[0]}.json`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+                
+                closeMenu();
+                alert(`✅ Exporterade ${workouts.length} träningspass!`);
+            } catch (error) {
+                console.error('Export failed:', error);
+                alert('Kunde inte exportera data. Försök igen.');
+            }
+        }
+
+        // Import workout data from JSON file
+        function importData() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            
+            input.onchange = async (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                try {
+                    const text = await file.text();
+                    const importData = JSON.parse(text);
+                    
+                    // Validate import data
+                    if (!importData.workouts || !Array.isArray(importData.workouts)) {
+                        alert('Ogiltig fil-format. Filen måste innehålla en "workouts"-array.');
+                        return;
+                    }
+                    
+                    // Ask for confirmation
+                    const count = importData.workouts.length;
+                    if (!confirm(`Vill du importera ${count} träningspass? Detta kommer att lägga till dem i din befintliga historik.`)) {
+                        return;
+                    }
+                    
+                    // Import all workouts
+                    let imported = 0;
+                    for (const workout of importData.workouts) {
+                        try {
+                            // Remove id if exists (let IndexedDB generate new ones)
+                            delete workout.id;
+                            await saveWorkoutToDB(workout);
+                            imported++;
+                        } catch (error) {
+                            console.error('Failed to import workout:', error);
+                        }
+                    }
+                    
+                    // Reload history
+                    await loadHistory();
+                    await buildHomeScreen();
+                    
+                    closeMenu();
+                    alert(`✅ Importerade ${imported} av ${count} träningspass!`);
+                } catch (error) {
+                    console.error('Import failed:', error);
+                    alert('Kunde inte importera data. Kontrollera att filen är korrekt.');
+                }
+            };
+            
+            input.click();
         }
 
         // Play sound and vibrate
@@ -2817,7 +3048,7 @@
             const duration = minutes * 60; // Convert to seconds
             
             // If timer is running, pause it
-            if (activityTimers[activity] && activityTimers[activity].interval) {
+            if (activityTimers[activity] && activityTimers[activity].interval && !activityTimers[activity].paused) {
                 pauseActivityTimer(activity);
                 return;
             }
@@ -2826,13 +3057,20 @@
             const display = document.getElementById(activity + '-timer-display');
             display.style.display = 'block';
 
-            // Initialize timer data if not exists or completed
-            if (!activityTimers[activity] || activityTimers[activity].timeLeft === 0) {
+            // Initialize timer data with end timestamp
+            if (!activityTimers[activity] || activityTimers[activity].completed) {
                 activityTimers[activity] = {
-                    timeLeft: duration,
+                    endTime: Date.now() + (duration * 1000),
                     interval: null,
-                    initialDuration: duration
+                    initialDuration: duration,
+                    paused: false,
+                    pausedTimeLeft: 0,
+                    completed: false
                 };
+            } else if (activityTimers[activity].paused) {
+                // Resume from pause
+                activityTimers[activity].paused = false;
+                activityTimers[activity].endTime = Date.now() + (activityTimers[activity].pausedTimeLeft * 1000);
             }
 
             // Update display
@@ -2840,13 +3078,15 @@
 
             // Start countdown
             activityTimers[activity].interval = setInterval(() => {
-                activityTimers[activity].timeLeft--;
                 updateActivityTimerDisplay(activity);
+                
+                const timeLeft = Math.ceil((activityTimers[activity].endTime - Date.now()) / 1000);
 
-                if (activityTimers[activity].timeLeft <= 0) {
+                if (timeLeft <= 0) {
                     // Timer finished
                     clearInterval(activityTimers[activity].interval);
                     activityTimers[activity].interval = null;
+                    activityTimers[activity].completed = true;
                     
                     // Mark as complete
                     const checkbox = document.getElementById(activity + '-done');
@@ -2862,7 +3102,7 @@
                         display.style.display = 'none';
                     }, 100);
                 }
-            }, 1000);
+            }, 100); // Update every 100ms for smoother countdown
 
             // Update button text to show pause option
             updateActivityTimerButtonsCustom(activity, true);
@@ -2870,7 +3110,7 @@
         
         function startActivityTimer(activity, duration) {
             // If timer is running, pause it
-            if (activityTimers[activity] && activityTimers[activity].interval) {
+            if (activityTimers[activity] && activityTimers[activity].interval && !activityTimers[activity].paused) {
                 pauseActivityTimer(activity);
                 return;
             }
@@ -2879,13 +3119,20 @@
             const display = document.getElementById(activity + '-timer-display');
             display.style.display = 'block';
 
-            // Initialize timer data if not exists or completed
-            if (!activityTimers[activity] || activityTimers[activity].timeLeft === 0) {
+            // Initialize timer data with end timestamp
+            if (!activityTimers[activity] || activityTimers[activity].completed) {
                 activityTimers[activity] = {
-                    timeLeft: duration,
+                    endTime: Date.now() + (duration * 1000),
                     interval: null,
-                    initialDuration: duration
+                    initialDuration: duration,
+                    paused: false,
+                    pausedTimeLeft: 0,
+                    completed: false
                 };
+            } else if (activityTimers[activity].paused) {
+                // Resume from pause
+                activityTimers[activity].paused = false;
+                activityTimers[activity].endTime = Date.now() + (activityTimers[activity].pausedTimeLeft * 1000);
             }
 
             // Update display
@@ -2893,13 +3140,15 @@
 
             // Start countdown
             activityTimers[activity].interval = setInterval(() => {
-                activityTimers[activity].timeLeft--;
                 updateActivityTimerDisplay(activity);
+                
+                const timeLeft = Math.ceil((activityTimers[activity].endTime - Date.now()) / 1000);
 
-                if (activityTimers[activity].timeLeft <= 0) {
+                if (timeLeft <= 0) {
                     // Timer finished
                     clearInterval(activityTimers[activity].interval);
                     activityTimers[activity].interval = null;
+                    activityTimers[activity].completed = true;
                     
                     // Mark as complete
                     const checkbox = document.getElementById(activity + '-done');
@@ -2916,7 +3165,7 @@
                         // Don't reset buttons - they're already disabled by saveActivityCompletion
                     }, 100);
                 }
-            }, 1000);
+            }, 100); // Update every 100ms for smoother countdown
 
             // Update button text to show pause option
             updateActivityTimerButtons(activity, true);
@@ -2925,14 +3174,21 @@
         function pauseActivityTimer(activity) {
             if (!activityTimers[activity]) return;
             
-            // Stop the interval
-            if (activityTimers[activity].interval) {
-                clearInterval(activityTimers[activity].interval);
-                activityTimers[activity].interval = null;
-            }
+            if (!activityTimers[activity].paused) {
+                // Pause - save remaining time
+                activityTimers[activity].paused = true;
+                activityTimers[activity].pausedTimeLeft = Math.ceil((activityTimers[activity].endTime - Date.now()) / 1000);
+                
+                // Stop the interval
+                if (activityTimers[activity].interval) {
+                    clearInterval(activityTimers[activity].interval);
+                    activityTimers[activity].interval = null;
+                }
 
-            // Update button text to show resume option
-            updateActivityTimerButtons(activity, false);
+                // Update button text to show resume option
+                updateActivityTimerButtons(activity, false);
+                updateActivityTimerButtonsCustom(activity, false);
+            }
         }
 
         function updateActivityTimerButtonsCustom(activity, isRunning) {
@@ -2976,7 +3232,14 @@
         function updateActivityTimerDisplay(activity) {
             if (!activityTimers[activity]) return;
 
-            const timeLeft = activityTimers[activity].timeLeft;
+            let timeLeft;
+            if (activityTimers[activity].paused) {
+                timeLeft = activityTimers[activity].pausedTimeLeft;
+            } else {
+                timeLeft = Math.ceil((activityTimers[activity].endTime - Date.now()) / 1000);
+                if (timeLeft < 0) timeLeft = 0;
+            }
+            
             const minutes = Math.floor(timeLeft / 60);
             const seconds = timeLeft % 60;
             
