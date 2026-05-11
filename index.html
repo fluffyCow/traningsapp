@@ -1009,6 +1009,208 @@
             font-weight: 600;
             cursor: pointer;
         }
+
+        /* ===== PROGRESSION SECTION ===== */
+        .progression-section {
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .progression-card {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 8px var(--shadow);
+        }
+
+        .progression-card h3 {
+            font-size: 16px;
+            margin-bottom: 12px;
+        }
+
+        .suggestion-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 14px;
+            gap: 8px;
+        }
+
+        .suggestion-row:last-child {
+            border-bottom: none;
+        }
+
+        .suggestion-name {
+            font-weight: 600;
+            flex: 1;
+        }
+
+        .suggestion-info {
+            text-align: right;
+            white-space: nowrap;
+        }
+
+        .suggestion-weight {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .badge-increase {
+            background: var(--success);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+            margin-left: 5px;
+        }
+
+        .badge-hold {
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+            margin-left: 5px;
+            border: 1px solid var(--border);
+        }
+
+        .badge-almost {
+            background: #ff9500;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+            margin-left: 5px;
+        }
+
+        .increase-weight-btn {
+            width: 100%;
+            padding: 10px;
+            background: var(--success);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: all 0.2s;
+        }
+
+        .increase-weight-btn:active {
+            transform: scale(0.98);
+        }
+
+        .apply-suggestion-btn {
+            width: 100%;
+            padding: 15px;
+            background: var(--success);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 15px;
+            transition: all 0.2s;
+        }
+
+        .apply-suggestion-btn:active {
+            transform: scale(0.98);
+        }
+
+        .plan-table-container {
+            overflow-x: auto;
+            margin-top: 8px;
+            border-radius: 8px;
+        }
+
+        .plan-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+
+        .plan-table th {
+            background: var(--accent);
+            color: white;
+            padding: 8px 5px;
+            text-align: center;
+            white-space: nowrap;
+            font-size: 11px;
+        }
+
+        .plan-table td {
+            padding: 7px 5px;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-primary);
+            font-size: 12px;
+        }
+
+        .plan-table tr:nth-child(even) td {
+            background: var(--bg-secondary);
+        }
+
+        .plan-table .now-row td {
+            font-weight: 700;
+            color: var(--accent);
+            background: rgba(0, 122, 255, 0.08);
+        }
+
+        .exercise-last-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: var(--text-secondary);
+            background: var(--bg-secondary);
+            padding: 7px 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .trend-up { color: var(--success); font-weight: 700; }
+        .trend-hold { color: var(--text-secondary); }
+
+        .bar-chart-wrap {
+            display: flex;
+            gap: 4px;
+            align-items: flex-end;
+            height: 60px;
+            margin-bottom: 4px;
+        }
+
+        .bar-chart-bar {
+            flex: 1;
+            border-radius: 3px 3px 0 0;
+            border: 1px solid var(--border);
+            position: relative;
+            background: var(--bg-secondary);
+        }
+
+        .bar-chart-bar.current { background: var(--accent); }
+
+        .bar-tip {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--accent);
+            white-space: nowrap;
+            padding-bottom: 2px;
+        }
     </style>
 </head>
 <body>
@@ -1024,6 +1226,7 @@
         <button class="menu-item" id="menu-home" onclick="menuShowTab('home')">🏠 Hem</button>
         <button class="menu-item" id="menu-workout" onclick="menuShowTab('workout')" style="display: none;">🏋️ Träning</button>
         <button class="menu-item" id="menu-history" onclick="menuShowTab('history')">📊 Historik</button>
+        <button class="menu-item" id="menu-progression" onclick="menuShowTab('progression')">📈 Progression</button>
         <hr style="border: none; border-top: 1px solid var(--border); margin: 10px 0;">
         <button class="menu-item" onclick="exportData()">📤 Exportera data</button>
         <button class="menu-item" onclick="importData()">📥 Importera data</button>
@@ -1681,6 +1884,15 @@
                 <div class="info-text">Ingen träningshistorik än.<br>Starta ett nytt pass för att börja logga!</div>
             </div>
         </div>
+
+        <!-- PROGRESSION TAB -->
+        <div id="progression" class="section">
+            <div class="progression-section">
+                <div id="progression-content">
+                    <div class="info-text">Laddar progression...</div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -1803,6 +2015,7 @@
             loadTheme();
             loadExerciseData();
             await loadHistory();
+            await syncExerciseDataFromHistory();
             
             // Check if we should show summary or home
             const lastCompleted = localStorage.getItem('lastCompletedSession');
@@ -2072,6 +2285,8 @@
                 loadHistory();
             } else if (tabName === 'home') {
                 buildHomeScreen();
+            } else if (tabName === 'progression') {
+                loadProgressionSection();
             }
         }
 
@@ -2995,11 +3210,14 @@
                         }
                     }
                     
-                    // Reload history
-                    await loadHistory();
-                    await buildHomeScreen();
-                    
+                    // Sync weights/reps from imported history
+                    await syncExerciseDataFromHistory();
+
+                    // Close menu and navigate to home to show updated stats
                     closeMenu();
+                    menuShowTab('home');
+                    
+                    // Show success message
                     alert(`✅ Importerade ${imported} av ${count} träningspass!`);
                 } catch (error) {
                     console.error('Import failed:', error);
@@ -3273,6 +3491,357 @@
             // Reset buttons
             resetActivityTimerButtonsCustom('warmup');
             resetActivityTimerButtonsCustom('cardio');
+        }
+
+        // ===== PROGRESSION SYSTEM =====
+
+        const PROG_INCREMENT = {
+            benpress: 5, benstrack: 2.5, larcurl: 2.5,
+            rodd: 2.5, brostpress: 2.5, axelpress: 2.5, plank: 5
+        };
+
+        const PROG_TARGET_REPS = {
+            benpress: 10, benstrack: 10, larcurl: 10,
+            rodd: 10, brostpress: 10, axelpress: 8, plank: 0
+        };
+
+        function calculateExerciseSuggestion(exerciseKey, history) {
+            const sessions = history
+                .filter(w => w.exercises && w.exercises[exerciseKey])
+                .sort((a, b) => b.timestamp - a.timestamp);
+
+            if (sessions.length === 0) return null;
+
+            const last = sessions[0];
+            const d = last.exercises[exerciseKey];
+            const lastWeight = parseFloat(d.weight);
+            const increment = PROG_INCREMENT[exerciseKey] || 2.5;
+
+            // Plank is time-based
+            if (exerciseKey === 'plank') {
+                const increase = lastWeight < 90;
+                return {
+                    lastWeight, increment,
+                    suggestedWeight: increase ? lastWeight + increment : lastWeight,
+                    shouldIncrease: increase,
+                    isTimeBased: true, lastReps: null, targetReps: null,
+                    lastDate: last.date
+                };
+            }
+
+            const lastReps = parseInt(d.reps) || 0;
+            const targetReps = PROG_TARGET_REPS[exerciseKey];
+            const metTarget = lastReps >= targetReps;
+            const suggestedWeight = metTarget
+                ? Math.round((lastWeight + increment) * 10) / 10
+                : lastWeight;
+
+            return {
+                lastWeight, increment, suggestedWeight,
+                shouldIncrease: metTarget,
+                lastReps, targetReps, isTimeBased: false,
+                lastDate: last.date
+            };
+        }
+
+        // Sync exerciseData localStorage from history and update all weight/reps inputs
+        async function syncExerciseDataFromHistory() {
+            let history = [];
+            try {
+                history = await getAllWorkouts();
+                history.sort((a, b) => b.timestamp - a.timestamp);
+            } catch (e) { return; }
+            if (history.length === 0) return;
+
+            const stored = JSON.parse(localStorage.getItem('exerciseData') || '{}');
+
+            exercises.forEach(exKey => {
+                const s = calculateExerciseSuggestion(exKey, history);
+                if (!s) return;
+
+                if (!stored[exKey]) stored[exKey] = {};
+
+                // Carry over weight, reps and sets from latest session with this exercise
+                const latestWithEx = history.find(w => w.exercises && w.exercises[exKey]);
+                if (latestWithEx) {
+                    const d = latestWithEx.exercises[exKey];
+                    // Always use the actual last recorded weight (not the suggestion)
+                    stored[exKey].weight = String(d.weight);
+                    if (d.reps && d.reps !== '-') stored[exKey].reps = String(d.reps);
+                    if (d.sets) stored[exKey].sets = String(d.sets);
+                }
+            });
+
+            localStorage.setItem('exerciseData', JSON.stringify(stored));
+            loadExerciseData();
+            await loadExerciseSuggestions();
+        }
+
+        // Inject "last session" hints onto workout cards
+        async function loadExerciseSuggestions() {
+            let history = [];
+            try { history = await getAllWorkouts(); } catch (e) { return; }
+            if (history.length === 0) return;
+
+            exercises.forEach(exKey => {
+                const s = calculateExerciseSuggestion(exKey, history);
+                if (!s) return;
+
+                const card = document.getElementById(exKey + '-weight')?.closest('.exercise-card');
+                if (!card) return;
+
+                const targetDiv = card.querySelector('.exercise-target');
+                if (!targetDiv) return;
+
+                // Remove old info if exists
+                card.querySelector('.exercise-last-info')?.remove();
+
+                const unit = s.isTimeBased ? 's' : ' kg';
+                const repsText = !s.isTimeBased
+                    ? `${s.lastReps}/${s.targetReps} reps`
+                    : '';
+
+                const infoDiv = document.createElement('div');
+                infoDiv.className = 'exercise-last-info';
+
+                // Compare current input value to decide state
+                const currentInput = document.getElementById(exKey + '-weight');
+                const currentVal = currentInput ? parseFloat(currentInput.value) : s.lastWeight;
+                const alreadyIncreased = Math.abs(currentVal - s.suggestedWeight) < 0.05 && s.shouldIncrease;
+
+                let rightText, rightClass;
+                if (alreadyIncreased) {
+                    rightText = `✔️ Vikt ökad till ${s.suggestedWeight}${unit}`;
+                    rightClass = 'trend-up';
+                } else if (s.isTimeBased) {
+                    rightText = s.shouldIncrease ? `↑ Öka! ${s.suggestedWeight}s` : `→ Håll ${s.lastWeight}s`;
+                    rightClass = s.shouldIncrease ? 'trend-up' : 'trend-hold';
+                } else if (s.shouldIncrease) {
+                    rightText = `↑ Öka nu! ${s.lastWeight}→${s.suggestedWeight} kg`;
+                    rightClass = 'trend-up';
+                } else {
+                    const repsLeft = s.targetReps - s.lastReps;
+                    if (repsLeft <= 2) {
+                        rightText = `Nästan! +${repsLeft} reps → ${s.suggestedWeight} kg`;
+                        rightClass = '';
+                    } else {
+                        rightText = `Klara ${s.targetReps} reps → ${s.suggestedWeight} kg`;
+                        rightClass = 'trend-hold';
+                    }
+                }
+
+                infoDiv.innerHTML = `
+                    <span>Förra: <strong>${s.lastWeight}${unit}</strong>${repsText ? ' · ' + repsText : ''}</span>
+                    <span class="${rightClass}" style="${!rightClass ? 'color:#ff9500;font-weight:700;' : ''}">${rightText}</span>`;
+                targetDiv.insertAdjacentElement('afterend', infoDiv);
+
+                // Remove old increase button if exists
+                card.querySelector('.increase-weight-btn')?.remove();
+
+                // Add increase button only if target met AND weight not already increased
+                if (s.shouldIncrease && !alreadyIncreased) {
+                    const btn = document.createElement('button');
+                    btn.className = 'increase-weight-btn';
+                    btn.textContent = `⬆️ Öka vikt till ${s.suggestedWeight}${unit}`;
+                    btn.onclick = () => increaseExerciseWeight(exKey, s.suggestedWeight);
+                    infoDiv.insertAdjacentElement('afterend', btn);
+                }
+            });
+        }
+
+        // Increase weight for a single exercise
+        function increaseExerciseWeight(exKey, newWeight) {
+            const input = document.getElementById(exKey + '-weight');
+            if (input) {
+                input.value = newWeight;
+                saveExerciseData(exKey, 'weight', newWeight);
+            }
+            // Hide the button after clicking
+            const card = document.getElementById(exKey + '-weight')?.closest('.exercise-card');
+            if (card) {
+                card.querySelector('.increase-weight-btn')?.remove();
+                const infoDiv = card.querySelector('.exercise-last-info');
+                if (infoDiv) {
+                    const span = infoDiv.querySelectorAll('span')[1];
+                    if (span) {
+                        span.className = 'trend-up';
+                        span.style = '';
+                        span.textContent = `✔️ Vikt ökad till ${newWeight} kg`;
+                    }
+                }
+            }
+        }
+
+        // Apply progression suggestions to weight inputs
+        async function applyProgressionToWorkout() {
+            let history = [];
+            try { history = await getAllWorkouts(); } catch (e) { return; }
+
+            exercises.forEach(exKey => {
+                const s = calculateExerciseSuggestion(exKey, history);
+                if (!s) return;
+                const input = document.getElementById(exKey + '-weight');
+                if (input) {
+                    input.value = s.suggestedWeight;
+                    saveExerciseData(exKey, 'weight', s.suggestedWeight);
+                }
+            });
+            alert('✅ Rekommenderade vikter inlagda i passet!');
+        }
+
+        // Build and render the full progression section
+        async function loadProgressionSection() {
+            const content = document.getElementById('progression-content');
+            if (!content) return;
+            content.innerHTML = '<div class="info-text">Laddar...</div>';
+
+            let history = [];
+            try {
+                history = await getAllWorkouts();
+                history.sort((a, b) => b.timestamp - a.timestamp);
+            } catch (e) {
+                content.innerHTML = '<div class="info-text">Kunde inte ladda historik.</div>';
+                return;
+            }
+
+            if (history.length === 0) {
+                content.innerHTML = '<div class="info-text">Logga minst ett pass för att se progressionsplan.</div>';
+                return;
+            }
+
+            let html = '';
+
+            // --- Nästa pass ---
+            html += '<div class="progression-card"><h3>🎯 Nästa pass – rekommenderade vikter</h3>';
+            exercises.forEach(exKey => {
+                const s = calculateExerciseSuggestion(exKey, history);
+                if (!s) return;
+                const name = getExerciseName(exKey);
+                const unit = s.isTimeBased ? 's' : ' kg';
+
+                let badge, conditionText;
+                if (s.shouldIncrease) {
+                    badge = `<span class="badge-increase">↑ +${s.increment}${unit.trim()}</span>`;
+                    conditionText = `<span style="font-size:11px;color:var(--success);">Klarat målet – öka nu!</span>`;
+                } else if (!s.isTimeBased && (s.targetReps - s.lastReps) <= 2) {
+                    badge = `<span class="badge-almost">↑ Nästan!</span>`;
+                    conditionText = `<span style="font-size:11px;color:#ff9500;">+${s.targetReps - s.lastReps} reps kvar → ${s.suggestedWeight} kg</span>`;
+                } else if (!s.isTimeBased) {
+                    badge = `<span class="badge-hold">→ Håll</span>`;
+                    conditionText = `<span style="font-size:11px;color:var(--text-secondary);">Klara ${s.targetReps} reps → öka till ${s.suggestedWeight} kg</span>`;
+                } else {
+                    badge = `<span class="badge-hold">→ Håll</span>`;
+                    conditionText = '';
+                }
+
+                html += `<div class="suggestion-row" style="flex-direction:column;align-items:stretch;gap:4px;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;">
+                        <div class="suggestion-name">${name}</div>
+                        <div class="suggestion-info">
+                            <span style="color:var(--text-secondary);font-size:12px;">${s.lastWeight}${unit} →</span>
+                            <span class="suggestion-weight"> ${s.suggestedWeight}${unit}</span>${badge}
+                        </div>
+                    </div>
+                    <div>${conditionText}</div>
+                </div>`;
+            });
+            html += '</div>';
+
+            html += `<button class="apply-suggestion-btn" onclick="applyProgressionToWorkout()">⚡ Lägg in vikter i träningspasset</button>`;
+
+            // --- 12-veckorsplan ---
+            html += '<div class="progression-card"><h3>📅 12-veckorsplan</h3>';
+            html += '<p style="font-size:13px;color:var(--text-secondary);margin-bottom:10px;">Ökning varannan vecka när du klarar målet antal reps.</p>';
+            html += buildWeeklyPlanHTML(history);
+            html += '</div>';
+
+            // --- Vikthistorik ---
+            html += buildProgressChartHTML(history);
+
+            content.innerHTML = html;
+        }
+
+        function buildWeeklyPlanHTML(history) {
+            const shortNames = {
+                benpress: 'Benpr.', benstrack: 'B.sträck', larcurl: 'Lårcurl',
+                rodd: 'Rodd', brostpress: 'Bröstpr.', axelpress: 'Axelpr.', plank: 'Planka'
+            };
+
+            // Start from suggested weights
+            const w = {};
+            exercises.forEach(ex => {
+                const s = calculateExerciseSuggestion(ex, history);
+                w[ex] = s ? s.suggestedWeight : 0;
+            });
+
+            let html = '<div class="plan-table-container"><table class="plan-table"><thead><tr><th>Vecka</th>';
+            exercises.forEach(ex => { html += `<th>${shortNames[ex]}</th>`; });
+            html += '</tr></thead><tbody>';
+
+            for (let week = 1; week <= 12; week++) {
+                const isNow = week === 1;
+                html += `<tr class="${isNow ? 'now-row' : ''}"><td>${isNow ? '▶ Nu' : 'V' + week}</td>`;
+                exercises.forEach(ex => {
+                    const unit = ex === 'plank' ? 's' : '';
+                    html += `<td>${w[ex]}${unit}</td>`;
+                });
+                html += '</tr>';
+
+                // Increase every 2 weeks
+                if (week % 2 === 0) {
+                    exercises.forEach(ex => {
+                        if (ex === 'plank') {
+                            if (week % 4 === 0 && w[ex] < 120) w[ex] += 5;
+                        } else {
+                            w[ex] = Math.round((w[ex] + PROG_INCREMENT[ex]) * 10) / 10;
+                        }
+                    });
+                }
+            }
+
+            html += '</tbody></table></div>';
+            return html;
+        }
+
+        function buildProgressChartHTML(history) {
+            const keyExercises = ['benpress', 'rodd', 'brostpress', 'axelpress'];
+            const sorted = [...history].sort((a, b) => a.timestamp - b.timestamp);
+
+            let html = '<div class="progression-card"><h3>📊 Vikthistorik (senaste 8 pass)</h3>';
+
+            keyExercises.forEach(exKey => {
+                const name = getExerciseName(exKey);
+                const sessions = sorted.filter(w => w.exercises && w.exercises[exKey]);
+                if (sessions.length < 2) return;
+
+                const recent = sessions.slice(-8);
+                const weights = recent.map(s => parseFloat(s.exercises[exKey].weight));
+                const minW = Math.min(...weights);
+                const maxW = Math.max(...weights);
+                const range = maxW - minW || 1;
+
+                html += `<div style="margin-bottom:18px;">`;
+                html += `<div style="font-weight:600;font-size:14px;margin-bottom:6px;">${name}`;
+                const diff = weights[weights.length - 1] - weights[0];
+                if (diff > 0) html += ` <span class="trend-up">+${Math.round(diff * 10) / 10} kg ↑</span>`;
+                html += `</div>`;
+                html += `<div class="bar-chart-wrap">`;
+                weights.forEach((wt, i) => {
+                    const heightPct = 25 + ((wt - minW) / range) * 75;
+                    const isCurrent = i === weights.length - 1;
+                    html += `<div class="bar-chart-bar${isCurrent ? ' current' : ''}" style="height:${heightPct}%;">`;
+                    if (isCurrent) html += `<div class="bar-tip">${wt}</div>`;
+                    html += `</div>`;
+                });
+                html += `</div>`;
+                html += `<div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-secondary);">`;
+                html += `<span>${recent[0].date.split(' ').slice(0,2).join(' ')}</span>`;
+                html += `<span>${recent[recent.length-1].date.split(' ').slice(0,2).join(' ')}</span>`;
+                html += `</div></div>`;
+            });
+
+            html += '</div>';
+            return html;
         }
 
         // Initialize app on load
