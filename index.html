@@ -673,6 +673,23 @@
         .activity-timer-text.danger {
             color: #ff3b30;
         }
+        .activity-skip-btn {
+            width: 100%;
+            padding: 10px;
+            margin-top: 8px;
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            transition: background 0.2s;
+        }
+        .activity-skip-btn:active {
+            opacity: 0.7;
+        }
 
         /* Workout Slides */
         .workout-slides {
@@ -839,6 +856,46 @@
         .home-buttons {
             display: flex;
             flex-direction: column;
+        }
+
+        /* ===== PRESET CARDS ===== */
+        .preset-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 12px 0 4px;
+        }
+        .preset-card {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 14px;
+            padding: 14px 10px;
+            cursor: pointer;
+            text-align: center;
+            transition: border-color 0.15s, transform 0.1s;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+        .preset-card:active { transform: scale(0.96); }
+        .preset-card.preset-featured {
+            grid-column: 1 / -1;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            text-align: left;
+            border-color: var(--accent);
+            padding: 16px 14px;
+        }
+        .preset-card-emoji { font-size: 26px; margin-bottom: 5px; }
+        .preset-featured .preset-card-emoji { font-size: 34px; margin-bottom: 0; flex-shrink: 0; }
+        .preset-card-name { font-size: 14px; font-weight: 700; margin-bottom: 3px; }
+        .preset-card-desc { font-size: 11px; color: var(--text-secondary); margin-bottom: 4px; line-height: 1.4; }
+        .preset-card-duration { font-size: 11px; color: var(--accent); font-weight: 700; }
+        .preset-divider {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 12px;
+            margin: 10px 0 2px;
         }
 
         .stats-grid {
@@ -1008,6 +1065,191 @@
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
+        }
+
+        /* ===== CONFIG SECTION ===== */
+        .config-section {
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .config-section h2 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        .config-section p {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+        .config-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        .config-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 10px 12px;
+            transition: opacity 0.2s;
+        }
+        .config-item.config-disabled {
+            opacity: 0.45;
+        }
+        .config-move-btns {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .config-move-btn {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 5px;
+            color: var(--text-primary);
+            font-size: 11px;
+            width: 26px;
+            height: 22px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .config-move-btn:disabled {
+            opacity: 0.25;
+            cursor: default;
+        }
+        .config-item-name {
+            flex: 1;
+            font-size: 15px;
+            font-weight: 600;
+        }
+        .config-item-type {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-right: 6px;
+        }
+        .config-toggle {
+            position: relative;
+            display: inline-block;
+            width: 42px;
+            height: 24px;
+            flex-shrink: 0;
+        }
+        .config-toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .config-toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--border);
+            border-radius: 24px;
+            transition: 0.2s;
+        }
+        .config-toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background: white;
+            border-radius: 50%;
+            transition: 0.2s;
+        }
+        .config-toggle input:checked + .config-toggle-slider {
+            background: var(--accent);
+        }
+        .config-toggle input:checked + .config-toggle-slider:before {
+            transform: translateX(18px);
+        }
+        .config-reset-btn {
+            width: 100%;
+            padding: 12px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-size: 14px;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+        .config-reset-btn:hover {
+            background: var(--border);
+        }
+        .config-info-banner {
+            background: var(--bg-card);
+            border: 1px solid var(--accent);
+            border-radius: 10px;
+            padding: 12px 14px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+        /* Config preset list (top level) */
+        .config-preset-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .config-preset-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 14px 12px;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+            transition: opacity 0.15s;
+        }
+        .config-preset-row:active { opacity: 0.65; }
+        .config-preset-row-emoji { font-size: 26px; flex-shrink: 0; }
+        .config-preset-row-info { flex: 1; min-width: 0; }
+        .config-preset-row-name { font-size: 15px; font-weight: 700; margin-bottom: 3px; }
+        .config-preset-row-meta { font-size: 12px; color: var(--text-secondary); }
+        .config-preset-row-arrow { font-size: 22px; color: var(--text-secondary); flex-shrink: 0; }
+        .config-custom-badge {
+            display: inline-block;
+            font-size: 10px;
+            background: var(--accent);
+            color: white;
+            padding: 1px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            vertical-align: middle;
+            margin-left: 5px;
+        }
+        /* Config preset editor */
+        .config-back-btn {
+            background: none;
+            border: none;
+            color: var(--accent);
+            font-size: 15px;
+            cursor: pointer;
+            padding: 0 0 14px 0;
+            font-weight: 600;
+            display: block;
+        }
+        .config-preset-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            padding: 12px 14px;
+            background: var(--bg-card);
+            border-radius: 10px;
+            border: 1px solid var(--border);
         }
 
         /* ===== PROGRESSION SECTION ===== */
@@ -1228,6 +1470,8 @@
         <button class="menu-item" id="menu-history" onclick="menuShowTab('history')">📊 Historik</button>
         <button class="menu-item" id="menu-progression" onclick="menuShowTab('progression')">📈 Progression</button>
         <hr style="border: none; border-top: 1px solid var(--border); margin: 10px 0;">
+        <button class="menu-item" id="menu-config" onclick="menuShowTab('config')">⚙️ Konfigurera pass</button>
+        <hr style="border: none; border-top: 1px solid var(--border); margin: 10px 0;">
         <button class="menu-item" onclick="exportData()">📤 Exportera data</button>
         <button class="menu-item" onclick="importData()">📥 Importera data</button>
     </div>
@@ -1336,16 +1580,10 @@
                                 <div class="activity-timer-text">⏱️ <span id="warmup-timer-value">5:00</span></div>
                             </div>
                             
-                            <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-                                <button class="timer-btn start" style="flex: 1;" onclick="startActivityTimerCustom('warmup')" id="warmup-timer-btn">
-                                    ▶️ Starta timer
-                                </button>
-                            </div>
-                            
-                            <div class="set-checkbox">
-                                <input type="checkbox" id="warmup-done" onchange="saveActivityCompletion('warmup', this.checked)">
-                                <label for="warmup-done">✓ Klar</label>
-                            </div>
+                            <button class="timer-btn start" style="width:100%; margin-bottom: 8px;" onclick="startActivityTimerCustom('warmup')" id="warmup-timer-btn">
+                                ▶️ Starta timer
+                            </button>
+                            <button class="activity-skip-btn" onclick="markActivityDoneAndNext('warmup')">Hoppa över →</button>
                         </div>
                     </div>
                     </div>
@@ -1403,20 +1641,20 @@
 
                             <button class="instructions-toggle" onclick="toggleInstructions('benpress')">📖 Instruktioner</button>
                             <div class="instructions" id="benpress-instructions">
-                                <h4>Hur maskinen ser ut:</h4>
-                                <p>En lutad stol med en stor fotplatta framför dig som du pressar bort från kroppen.</p>
-                                <h4>Så gör du:</h4>
-                                <p>• Sitt med ryggen mot ryggstödet<br>
-                                • Fötterna axelbrett på plattan<br>
-                                • Pressa plattan bort – benen nästan raka<br>
-                                • Sänk långsamt</p>
+                                <h4>Inställning:</h4>
+                                <p>• Justera sätet (dragsprinten) så knäna är i ca 90° vinkel i startläget<br>
+                                • Placera fötterna axelbrett på fotplattan med tårna lätt utvända<br>
+                                • Ta tag i handtagen på sidan av sätet</p>
+                                <h4>Rörelse:</h4>
+                                <p>• Pressa med benen tills de är nästan raka utan att låsa knäna<br>
+                                • Sänk kontrollerat tillbaka till startläget</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Slide 2: Bensträck -->
-                <div class="workout-slide" data-slide="2">
+                <!-- Slide 3: Bensträck -->
+                <div class="workout-slide" data-slide="3">
                     <div class="slide-content">
                         <h2 style="margin-bottom: 12px; font-size: 18px; color: var(--text-secondary);">🦵 BEN</h2>
                         <div class="exercise-card">
@@ -1468,20 +1706,20 @@
 
                             <button class="instructions-toggle" onclick="toggleInstructions('benstrack')">📖 Instruktioner</button>
                             <div class="instructions" id="benstrack-instructions">
-                                <h4>Hur maskinen ser ut:</h4>
-                                <p>Du sitter i en stol och har en vadkudde framför skenbenen som du lyfter med att sträcka benen.</p>
-                                <h4>Så gör du:</h4>
-                                <p>• Sitt med knävecken nära sätets framkant<br>
-                                • Fötterna bakom stoppkudden<br>
-                                • Sträck benen uppåt<br>
-                                • Sänk kontrollerat</p>
+                                <h4>Inställning:</h4>
+                                <p>• Justera ryggstödet så knäna är i linje med maskinens vridpunkt<br>
+                                • Placera det rörliga vadstödet bekvämt ovanför anklarna<br>
+                                • Använd dragsprinten vid kammen för att välja önskat startläge</p>
+                                <h4>Rörelse:</h4>
+                                <p>• Sträck benen till full extension utan att "sparka" eller översträcka<br>
+                                • Sänk kontrollerat tillbaka till startläget</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Slide 3: Lårcurl -->
-                <div class="workout-slide" data-slide="3">
+                <!-- Slide 5: Lårcurl -->
+                <div class="workout-slide" data-slide="5">
                     <div class="slide-content">
                         <h2 style="margin-bottom: 12px; font-size: 18px; color: var(--text-secondary);">🦵 BEN</h2>
                         <div class="exercise-card">
@@ -1533,19 +1771,21 @@
 
                             <button class="instructions-toggle" onclick="toggleInstructions('larcurl')">📖 Instruktioner</button>
                             <div class="instructions" id="larcurl-instructions">
-                                <h4>Hur maskinen ser ut:</h4>
-                                <p>Sittande: du sitter och har en vadkudde bakom underbenen som du drar bakåt.</p>
-                                <h4>Så gör du:</h4>
-                                <p>• Sitt så knäleden är i linje med maskinens vridpunkt<br>
-                                • Böj benen genom att dra vadkudden bakåt<br>
-                                • Sänk långsamt</p>
+                                <h4>Inställning:</h4>
+                                <p>• Justera ryggstödet så knäna är i linje med maskinens vridpunkt<br>
+                                • Placera det rörliga vadstödet bekvämt bakom anklarna<br>
+                                • Använd dragsprinten vid kammen för att välja önskat startläge<br>
+                                • Sänk lårstödet tills det sitter bekvämt mot låren och ta tag i handtagen</p>
+                                <h4>Rörelse:</h4>
+                                <p>• Dra benen nedåt och bakåt i en kontrollerad rörelse<br>
+                                • Sänk kontrollerat tillbaka till startläget</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Slide 4: Rodd -->
-                <div class="workout-slide" data-slide="4">
+                <!-- Slide 2: Rodd -->
+                <div class="workout-slide" data-slide="2">
                     <div class="slide-content">
                         <h2 style="margin-bottom: 12px; font-size: 18px; color: var(--text-secondary);">💪 ÖVERKROPP</h2>
                         <div class="exercise-card">
@@ -1597,27 +1837,27 @@
 
                             <button class="instructions-toggle" onclick="toggleInstructions('rodd')">📖 Instruktioner</button>
                             <div class="instructions" id="rodd-instructions">
-                                <h4>Hur maskinen ser ut:</h4>
-                                <p>Du sitter med ett handtag framför dig som du drar mot kroppen.</p>
-                                <h4>Så gör du:</h4>
-                                <p>• Sitt med rak rygg<br>
-                                • Ta tag i handtaget<br>
-                                • Dra handtaget mot magen och för armbågarna bakåt<br>
-                                • Släpp fram igen kontrollerat</p>
+                                <h4>Inställning:</h4>
+                                <p>• Justera säteshöjden så mitten av bröstet är i linje med övre delen av bröststödet<br>
+                                • Justera bröststödet så armarna är fullt sträckta när du tar tag i handtagen</p>
+                                <h4>Rörelse:</h4>
+                                <p>• Ta tag om vertikala eller parallella handtag<br>
+                                • Krama ihop skulderbladen medan du drar armbågarna bakåt mot sidan<br>
+                                • Sänk kontrollerat tillbaka med bibehållen hållning</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Slide 5: Bröstpress -->
-                <div class="workout-slide" data-slide="5">
+                <!-- Slide 4: Fly -->
+                <div class="workout-slide" data-slide="4">
                     <div class="slide-content">
                         <h2 style="margin-bottom: 12px; font-size: 18px; color: var(--text-secondary);">💪 ÖVERKROPP</h2>
                         <div class="exercise-card">
                             <div class="exercise-header">
                                 <div>
-                                    <div class="exercise-title">Bröstpress</div>
-                                    <div class="exercise-target">Bröst, axlar, triceps</div>
+                                    <div class="exercise-title">Fly (Pec Deck)</div>
+                                    <div class="exercise-target">Bröstmuskler (pectoralis)</div>
                                 </div>
                                 <div class="exercise-icon">💪</div>
                             </div>
@@ -1625,50 +1865,52 @@
                             <div class="weight-input-group">
                                 <div class="input-wrapper">
                                     <div class="input-label">Vikt (kg)</div>
-                                    <input type="number" class="weight-input" id="brostpress-weight" value="25" onchange="saveExerciseData('brostpress', 'weight', this.value)">
+                                    <input type="number" class="weight-input" id="fly-weight" value="25" onchange="saveExerciseData('fly', 'weight', this.value)">
                                 </div>
                                 <div class="input-wrapper">
                                     <div class="input-label">Set</div>
-                                    <input type="number" class="weight-input" id="brostpress-sets" value="2" onchange="saveExerciseData('brostpress', 'sets', this.value)">
+                                    <input type="number" class="weight-input" id="fly-sets" value="2" onchange="saveExerciseData('fly', 'sets', this.value)">
                                 </div>
                                 <div class="input-wrapper">
                                     <div class="input-label">Reps</div>
-                                    <input type="number" class="weight-input" id="brostpress-reps" value="12" onchange="saveExerciseData('brostpress', 'reps', this.value)">
+                                    <input type="number" class="weight-input" id="fly-reps" value="12" onchange="saveExerciseData('fly', 'reps', this.value)">
                                 </div>
                             </div>
 
                             <div class="sets-container">
                                 <div class="set-counter">
                                     <div class="set-counter-text">Genomförda set</div>
-                                    <div class="set-counter-value" id="brostpress-counter">0 / 2</div>
+                                    <div class="set-counter-value" id="fly-counter">0 / 2</div>
                                 </div>
-                                <button class="set-button" id="brostpress-set-btn" onclick="completeSet('brostpress')">
+                                <button class="set-button" id="fly-set-btn" onclick="completeSet('fly')">
                                     ✓ Markera set som klart
                                 </button>
                                 
                                 <!-- Rest Timer -->
-                                <div class="rest-timer-container" id="brostpress-rest-timer">
-                                    <div class="rest-timer-display" id="brostpress-rest-display">⏱️ 0:45</div>
+                                <div class="rest-timer-container" id="fly-rest-timer">
+                                    <div class="rest-timer-display" id="fly-rest-display">⏱️ 0:45</div>
                                     <div class="rest-timer-buttons">
-                                        <button class="rest-timer-btn pause" id="brostpress-rest-pause" onclick="pauseRestTimer('brostpress')">⏸️ Pausa</button>
-                                        <button class="rest-timer-btn skip" onclick="skipRestTimer('brostpress')">⏭️ Hoppa över</button>
+                                        <button class="rest-timer-btn pause" id="fly-rest-pause" onclick="pauseRestTimer('fly')">⏸️ Pausa</button>
+                                        <button class="rest-timer-btn skip" onclick="skipRestTimer('fly')">⏭️ Hoppa över</button>
                                     </div>
                                 </div>
                                 
-                                <button class="timer-btn reset" onclick="resetSetCounter('brostpress')" style="margin-top: 5px;">
+                                <button class="timer-btn reset" onclick="resetSetCounter('fly')" style="margin-top: 5px;">
                                     🔄 Återställ set
                                 </button>
                             </div>
 
-                            <button class="instructions-toggle" onclick="toggleInstructions('brostpress')">📖 Instruktioner</button>
-                            <div class="instructions" id="brostpress-instructions">
+                            <button class="instructions-toggle" onclick="toggleInstructions('fly')">📖 Instruktioner</button>
+                            <div class="instructions" id="fly-instructions">
                                 <h4>Hur maskinen ser ut:</h4>
-                                <p>Som ett sittande bänkpress: du sitter och pressar två handtag framåt.</p>
-                                <h4>Så gör du:</h4>
-                                <p>• Sitt med ryggen rak mot ryggstödet<br>
-                                • Handtagen ska vara i brösthöjd<br>
-                                • Pressa framåt tills armarna nästan är raka<br>
-                                • Sänk långsamt tillbaka</p>
+                                <p>Du sitter vänd bort från ryggstödet med handtag på var sida – du för armarna samman framför dig (inte trycker framåt).</p>
+                                <h4>Inställning:</h4>
+                                <p>• Justera säteshöjden så handtagen är precis under axelhöjd<br>
+                                • Justera handtagspositionen (via knapp på varje arm) så att överarmarna pekar rakt ut åt sidan när du håller i handtagen</p>
+                                <h4>Rörelse:</h4>
+                                <p>• Spänn bröstmusklerna och för långsamt handtagen mot varandra framför dig<br>
+                                • Sänk kontrollerat tillbaka utan att slappna av i musklerna<br>
+                                • Undvik att låsa armbågarna rakt – håll en lätt böj</p>
                             </div>
                         </div>
                     </div>
@@ -1727,20 +1969,154 @@
 
                             <button class="instructions-toggle" onclick="toggleInstructions('axelpress')">📖 Instruktioner</button>
                             <div class="instructions" id="axelpress-instructions">
-                                <h4>Hur maskinen ser ut:</h4>
-                                <p>En stol där handtagen sitter ovanför axlarna – du pressar rakt uppåt.</p>
-                                <h4>Så gör du:</h4>
-                                <p>• Sitt stabilt med ryggen mot stödet<br>
-                                • Starta med handtagen vid öronhöjd<br>
-                                • Pressa uppåt tills armarna nästan är raka<br>
-                                • Sänk kontrollerat</p>
+                                <h4>Inställning:</h4>
+                                <p>• Justera säteshöjden så handtagen är precis ovanför axlarna<br>
+                                • Sitt med rak rygg och axlarna mot stödet<br>
+                                • Främre handtagen kan föredras vid axelbesvär</p>
+                                <h4>Rörelse:</h4>
+                                <p>• Pressa handtagen uppåt till fullt överhängt läge utan att låsa armbågarna<br>
+                                • Sänk kontrollerat tillbaka till startläget</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Slide 7: Plankan -->
+                <!-- Slide 7: Adduktor/Abduktor -->
                 <div class="workout-slide" data-slide="7">
+                    <div class="slide-content">
+                        <h2 style="margin-bottom: 12px; font-size: 18px; color: var(--text-secondary);">🦵 BEN</h2>
+                        <div class="exercise-card">
+                            <div class="exercise-header">
+                                <div>
+                                    <div class="exercise-title">Adduktor / Abduktor</div>
+                                    <div class="exercise-target">Innerlår (adduktor) &amp; Ytterlår (abduktor)</div>
+                                </div>
+                                <div class="exercise-icon">🦵</div>
+                            </div>
+
+                            <div class="weight-input-group">
+                                <div class="input-wrapper">
+                                    <div class="input-label">Vikt (kg)</div>
+                                    <input type="number" class="weight-input" id="adduktor-weight" value="30" onchange="saveExerciseData('adduktor', 'weight', this.value)">
+                                </div>
+                                <div class="input-wrapper">
+                                    <div class="input-label">Set</div>
+                                    <input type="number" class="weight-input" id="adduktor-sets" value="2" onchange="saveExerciseData('adduktor', 'sets', this.value)">
+                                </div>
+                                <div class="input-wrapper">
+                                    <div class="input-label">Reps</div>
+                                    <input type="number" class="weight-input" id="adduktor-reps" value="12" onchange="saveExerciseData('adduktor', 'reps', this.value)">
+                                </div>
+                            </div>
+
+                            <div class="sets-container">
+                                <div class="set-counter">
+                                    <div class="set-counter-text">Genomförda set</div>
+                                    <div class="set-counter-value" id="adduktor-counter">0 / 2</div>
+                                </div>
+                                <button class="set-button" id="adduktor-set-btn" onclick="completeSet('adduktor')">
+                                    ✓ Markera set som klart
+                                </button>
+
+                                <!-- Rest Timer -->
+                                <div class="rest-timer-container" id="adduktor-rest-timer">
+                                    <div class="rest-timer-display" id="adduktor-rest-display">⏱️ 0:45</div>
+                                    <div class="rest-timer-buttons">
+                                        <button class="rest-timer-btn pause" id="adduktor-rest-pause" onclick="pauseRestTimer('adduktor')">⏸️ Pausa</button>
+                                        <button class="rest-timer-btn skip" onclick="skipRestTimer('adduktor')">⏭️ Hoppa över</button>
+                                    </div>
+                                </div>
+
+                                <button class="timer-btn reset" onclick="resetSetCounter('adduktor')" style="margin-top: 5px;">
+                                    🔄 Återställ set
+                                </button>
+                            </div>
+
+                            <button class="instructions-toggle" onclick="toggleInstructions('adduktor')">📖 Instruktioner</button>
+                            <div class="instructions" id="adduktor-instructions">
+                                <h4>Hur maskinen ser ut:</h4>
+                                <p>Du sitter med knäkuddar antingen på insidan eller utsidan av låren beroende på övning.</p>
+                                <h4>Adduktor – innerlår (kuddar på insidan):</h4>
+                                <p>• Ställ in kuddarnas startposition brett isär<br>
+                                • Pressa benen mot varandra<br>
+                                • Håll ett ögonblick, släpp sedan kontrollerat</p>
+                                <h4>Abduktor – ytterlår (kuddar på utsidan):</h4>
+                                <p>• Ställ in kuddarnas startposition tätt ihop<br>
+                                • Pressa benen utåt<br>
+                                • Håll ett ögonblick, återgå kontrollerat</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 8: Lat Pull -->
+                <div class="workout-slide" data-slide="8">
+                    <div class="slide-content">
+                        <h2 style="margin-bottom: 12px; font-size: 18px; color: var(--text-secondary);">💪 ÖVERKROPP</h2>
+                        <div class="exercise-card">
+                            <div class="exercise-header">
+                                <div>
+                                    <div class="exercise-title">Lat Pull (Latsdrag)</div>
+                                    <div class="exercise-target">Latissimus, övre rygg, biceps</div>
+                                </div>
+                                <div class="exercise-icon">💪</div>
+                            </div>
+
+                            <div class="weight-input-group">
+                                <div class="input-wrapper">
+                                    <div class="input-label">Vikt (kg)</div>
+                                    <input type="number" class="weight-input" id="latpull-weight" value="30" onchange="saveExerciseData('latpull', 'weight', this.value)">
+                                </div>
+                                <div class="input-wrapper">
+                                    <div class="input-label">Set</div>
+                                    <input type="number" class="weight-input" id="latpull-sets" value="2" onchange="saveExerciseData('latpull', 'sets', this.value)">
+                                </div>
+                                <div class="input-wrapper">
+                                    <div class="input-label">Reps</div>
+                                    <input type="number" class="weight-input" id="latpull-reps" value="12" onchange="saveExerciseData('latpull', 'reps', this.value)">
+                                </div>
+                            </div>
+
+                            <div class="sets-container">
+                                <div class="set-counter">
+                                    <div class="set-counter-text">Genomförda set</div>
+                                    <div class="set-counter-value" id="latpull-counter">0 / 2</div>
+                                </div>
+                                <button class="set-button" id="latpull-set-btn" onclick="completeSet('latpull')">
+                                    ✓ Markera set som klart
+                                </button>
+
+                                <!-- Rest Timer -->
+                                <div class="rest-timer-container" id="latpull-rest-timer">
+                                    <div class="rest-timer-display" id="latpull-rest-display">⏱️ 0:45</div>
+                                    <div class="rest-timer-buttons">
+                                        <button class="rest-timer-btn pause" id="latpull-rest-pause" onclick="pauseRestTimer('latpull')">⏸️ Pausa</button>
+                                        <button class="rest-timer-btn skip" onclick="skipRestTimer('latpull')">⏭️ Hoppa över</button>
+                                    </div>
+                                </div>
+
+                                <button class="timer-btn reset" onclick="resetSetCounter('latpull')" style="margin-top: 5px;">
+                                    🔄 Återställ set
+                                </button>
+                            </div>
+
+                            <button class="instructions-toggle" onclick="toggleInstructions('latpull')">📖 Instruktioner</button>
+                            <div class="instructions" id="latpull-instructions">
+                                <h4>Inställning:</h4>
+                                <p>• Justera knästöden till bekväm höjd så låren inte lyfter under rörelsen<br>
+                                • Stå upp och ta grepp om stången (axelbrett eller bredare grepp)<br>
+                                • Sätt dig ner med låren under knästöden</p>
+                                <h4>Rörelse:</h4>
+                                <p>• Luta dig lätt bakåt i höfterna<br>
+                                • Dra stången nedåt mot övre bröstet tills armbågarna är under axelnivån<br>
+                                • Sänk kontrollerat tillbaka tills armarna är fullt sträckta</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 9: Plankan -->
+                <div class="workout-slide" data-slide="9">
                     <div class="slide-content">
                         <h2 style="margin-bottom: 12px; font-size: 18px; color: var(--text-secondary);">🧱 BÅL</h2>
                         <div class="exercise-card">
@@ -1802,8 +2178,73 @@
                     </div>
                 </div>
 
-                <!-- Slide 8: Konditionsavslut -->
-                <div class="workout-slide" data-slide="8">
+                <!-- Slide 10: AB-crunch -->
+                <div class="workout-slide" data-slide="10">
+                    <div class="slide-content">
+                        <h2 style="margin-bottom: 12px; font-size: 18px; color: var(--text-secondary);">🧱 BÅL</h2>
+                        <div class="exercise-card">
+                            <div class="exercise-header">
+                                <div>
+                                    <div class="exercise-title">AB-crunch (maskin)</div>
+                                    <div class="exercise-target">Magmuskler, core</div>
+                                </div>
+                                <div class="exercise-icon">🧱</div>
+                            </div>
+
+                            <div class="weight-input-group">
+                                <div class="input-wrapper">
+                                    <div class="input-label">Vikt (kg)</div>
+                                    <input type="number" class="weight-input" id="abcrunch-weight" value="20" onchange="saveExerciseData('abcrunch', 'weight', this.value)">
+                                </div>
+                                <div class="input-wrapper">
+                                    <div class="input-label">Set</div>
+                                    <input type="number" class="weight-input" id="abcrunch-sets" value="2" onchange="saveExerciseData('abcrunch', 'sets', this.value)">
+                                </div>
+                                <div class="input-wrapper">
+                                    <div class="input-label">Reps</div>
+                                    <input type="number" class="weight-input" id="abcrunch-reps" value="15" onchange="saveExerciseData('abcrunch', 'reps', this.value)">
+                                </div>
+                            </div>
+
+                            <div class="sets-container">
+                                <div class="set-counter">
+                                    <div class="set-counter-text">Genomförda set</div>
+                                    <div class="set-counter-value" id="abcrunch-counter">0 / 2</div>
+                                </div>
+                                <button class="set-button" id="abcrunch-set-btn" onclick="completeSet('abcrunch')">
+                                    ✓ Markera set som klart
+                                </button>
+
+                                <!-- Rest Timer -->
+                                <div class="rest-timer-container" id="abcrunch-rest-timer">
+                                    <div class="rest-timer-display" id="abcrunch-rest-display">⏱️ 0:45</div>
+                                    <div class="rest-timer-buttons">
+                                        <button class="rest-timer-btn pause" id="abcrunch-rest-pause" onclick="pauseRestTimer('abcrunch')">⏸️ Pausa</button>
+                                        <button class="rest-timer-btn skip" onclick="skipRestTimer('abcrunch')">⏭️ Hoppa över</button>
+                                    </div>
+                                </div>
+
+                                <button class="timer-btn reset" onclick="resetSetCounter('abcrunch')" style="margin-top: 5px;">
+                                    🔄 Återställ set
+                                </button>
+                            </div>
+
+                            <button class="instructions-toggle" onclick="toggleInstructions('abcrunch')">📖 Instruktioner</button>
+                            <div class="instructions" id="abcrunch-instructions">
+                                <h4>Hur maskinen ser ut:</h4>
+                                <p>En "Premium"-märkt sittande maskin med ett bröststöd som du kränger framåt mot.</p>
+                                <h4>Så gör du:</h4>
+                                <p>• Sitt med ryggen mot ryggstödet, händerna på handtagen<br>
+                                • Pressa bröststödet framåt/nedåt genom att rulla ihop överkroppen<br>
+                                • Håll ett ögonblick i den ihopkrängda positionen<br>
+                                • Sträck ut kontrollerat tillbaka</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 11: Konditionsavslut -->
+                <div class="workout-slide" data-slide="11">
                     <div class="slide-content">
                         <div class="warmup-card">
                             <h3 style="margin-bottom: 15px;">🏃 Konditionsavslut</h3>
@@ -1816,31 +2257,43 @@
                             </div>
                             
                             <ul style="margin-bottom: 15px;">
-                                <li>Roddmaskin - lugnt och rytmiskt</li>
-                                <li>Cykel - lätt motstånd</li>
+                                <li>Roddmaskin - se instruktioner nedan</li>
+                                <li>Crosstrainer - lätt motstånd</li>
                                 <li>Löpband - rask promenad med lite lutning</li>
                             </ul>
+
+                            <button class="instructions-toggle" onclick="toggleInstructions('roddmaskin')" style="margin-bottom: 12px;">📖 Hur man använder roddmaskinen</button>
+                            <div class="instructions" id="roddmaskin-instructions">
+                                <h4>Starta maskinen:</h4>
+                                <p>• Sätt dig ner – maskinen startar automatiskt när du börjar ro</p>
+                                <h4>Sittposition:</h4>
+                                <p>• Fötterna i fotstöden, rem över vristen<br>
+                                • Knäna böjda i startläget, rumpan på sätets framkant<br>
+                                • Håll i handtaget med axelbrett grepp</p>
+                                <h4>Rörelsens tre faser:</h4>
+                                <p>• <strong>Frånskjut:</strong> Pressa ifrån med benen medan armar och rygg är raka<br>
+                                • <strong>Drag:</strong> När benen är nästan raka – luta ryggen lätt bakåt och dra handtaget mot nedre revbenen<br>
+                                • <strong>Återgång:</strong> Sträck armarna, luta kroppen framåt, böj knäna tillbaka till start</p>
+                                <h4>Tips:</h4>
+                                <p>• Håll rygg rak hela tiden – undvik att runda<br>
+                                • Ben ska driva rörelsen (ca 60 %), rygg + armar resten<br>
+                                • Lugnt och rytmiskt tempo för kondition</p>
+                            </div>
                             
                             <div id="cardio-timer-display" class="activity-timer-display" style="display: none;">
                                 <div class="activity-timer-text">⏱️ <span id="cardio-timer-value">5:00</span></div>
                             </div>
                             
-                            <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-                                <button class="timer-btn start" style="flex: 1;" onclick="startActivityTimerCustom('cardio')" id="cardio-timer-btn">
-                                    ▶️ Starta timer
-                                </button>
-                            </div>
-                            
-                            <div class="set-checkbox">
-                                <input type="checkbox" id="cardio-done" onchange="saveActivityCompletion('cardio', this.checked)">
-                                <label for="cardio-done">✓ Klar</label>
-                            </div>
+                            <button class="timer-btn start" style="width:100%; margin-bottom: 8px;" onclick="startActivityTimerCustom('cardio')" id="cardio-timer-btn">
+                                ▶️ Starta timer
+                            </button>
+                            <button class="activity-skip-btn" onclick="markActivityDoneAndNext('cardio')">Hoppa över →</button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Slide 9: Stretch -->
-                <div class="workout-slide" data-slide="9">
+                <!-- Slide 12: Stretch -->
+                <div class="workout-slide" data-slide="12">
                     <div class="slide-content">
                         <div class="stretch-card">
                             <h3 style="margin-bottom: 10px;">🧘 Stretch – 2-5 min</h3>
@@ -1876,6 +2329,17 @@
                 </div>
             </div>
         </div>
+        </div>
+
+        <!-- CONFIG TAB -->
+        <div id="config" class="section">
+            <div class="config-section">
+                <h2>⚙️ Konfigurera pass</h2>
+                <p>Välj vilka övningar som ingår i varje pass och i vilken ordning.</p>
+                <div id="config-content">
+                    <div class="info-text">Laddar...</div>
+                </div>
+            </div>
         </div>
 
         <!-- HISTORY TAB -->
@@ -1991,15 +2455,122 @@
         let activityTimers = {}; // Store activity timer intervals
         let restTimers = {}; // Store rest timer intervals per exercise
         let restTimerTimeouts = {}; // Store setTimeout IDs for hiding timers
-        const exercises = ['benpress', 'benstrack', 'larcurl', 'rodd', 'brostpress', 'axelpress', 'plank'];
+        const exercises = ['benpress', 'rodd', 'benstrack', 'fly', 'larcurl', 'axelpress', 'adduktor', 'latpull', 'plank', 'abcrunch'];
         const activities = ['warmup', 'cardio', 'stretch'];
         const stretchExercises = ['framsida', 'baksida', 'rumpa', 'brost', 'axlar', 'rygg'];
         
         // Slide navigation
         let currentSlide = 0;
-        const totalSlides = 10;
-        const slideNames = ['Uppvärmning', 'Benpress', 'Bensträck', 'Lårcurl', 'Rodd', 'Bröstpress', 'Axelpress', 'Plankan', 'Kondition', 'Stretch'];
-        const slideKeys = ['warmup', 'benpress', 'benstrack', 'larcurl', 'rodd', 'brostpress', 'axelpress', 'plank', 'cardio', 'stretch'];
+        const totalSlides = 13; // total number of HTML slides (do not change)
+        const slideNames = ['Uppvärmning', 'Benpress', 'Rodd', 'Bensträck', 'Fly', 'Lårcurl', 'Axelpress', 'Adduktor/Abduktor', 'Lat Pull', 'Plankan', 'AB-crunch', 'Kondition', 'Stretch'];
+        const slideKeys = ['warmup', 'benpress', 'rodd', 'benstrack', 'fly', 'larcurl', 'axelpress', 'adduktor', 'latpull', 'plank', 'abcrunch', 'cardio', 'stretch'];
+        const slideTypes = ['activity', 'lower', 'upper', 'lower', 'upper', 'lower', 'upper', 'lower', 'upper', 'core', 'core', 'activity', 'activity'];
+        const ALL_SLIDES = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+
+        // Workout type presets
+        const WORKOUT_PRESETS = [
+            {
+                id: 'fullbody',
+                name: 'Helkropp Styrka',
+                emoji: '💪',
+                description: 'Alla styrkeövningar – överkropp, underkropp & bål',
+                duration: '~60 min',
+                config: { orderedSlides: [0,1,2,3,4,5,6,7,8,9,10,11,12], disabledSlides: [] }
+            },
+            {
+                id: 'lower',
+                name: 'Underkropp',
+                emoji: '🦵',
+                description: 'Benpress, bensträck, lårcurl, adduktor + bål',
+                duration: '~40 min',
+                config: { orderedSlides: [0,1,3,5,7,9,10,11,12], disabledSlides: [] }
+            },
+            {
+                id: 'upper',
+                name: 'Överkropp',
+                emoji: '🏋️',
+                description: 'Rodd, fly, axelpress, lat pull + bål',
+                duration: '~40 min',
+                config: { orderedSlides: [0,2,4,6,8,9,10,11,12], disabledSlides: [] }
+            },
+            {
+                id: 'cardio',
+                name: 'Kondition',
+                emoji: '🏃',
+                description: 'Uppvärmning, roddmaskin / löpband & stretch',
+                duration: '~30 min',
+                config: { orderedSlides: [0,11,12], disabledSlides: [] }
+            },
+            {
+                id: 'express',
+                name: 'Express',
+                emoji: '⚡',
+                description: 'Snabbpass – bästa blandningen på halva tiden',
+                duration: '~30 min',
+                config: { orderedSlides: [0,1,2,4,5,9,11,12], disabledSlides: [] }
+            }
+        ];
+
+        // Workout config (user-defined order + enabled state)
+        let workoutConfig = { orderedSlides: [...ALL_SLIDES], disabledSlides: [] };
+        let workoutSequence = [...ALL_SLIDES]; // active slides in order
+
+        function loadWorkoutConfig() {
+            const stored = localStorage.getItem('workoutConfig');
+            if (stored) {
+                try {
+                    const parsed = JSON.parse(stored);
+                    // Forward-compat: add any new slides not in stored config
+                    const storedSet = new Set(parsed.orderedSlides);
+                    ALL_SLIDES.forEach(s => { if (!storedSet.has(s)) parsed.orderedSlides.push(s); });
+                    // Remove obsolete slides
+                    parsed.orderedSlides = parsed.orderedSlides.filter(s => ALL_SLIDES.includes(s));
+                    parsed.disabledSlides = (parsed.disabledSlides || []).filter(s => ALL_SLIDES.includes(s));
+                    workoutConfig = parsed;
+                } catch (e) {
+                    workoutConfig = { orderedSlides: [...ALL_SLIDES], disabledSlides: [] };
+                }
+            }
+            buildWorkoutSequence();
+        }
+
+        function buildWorkoutSequence() {
+            workoutSequence = workoutConfig.orderedSlides.filter(
+                s => !workoutConfig.disabledSlides.includes(s)
+            );
+        }
+
+        function saveWorkoutConfig() {
+            localStorage.setItem('workoutConfig', JSON.stringify(workoutConfig));
+            buildWorkoutSequence();
+        }
+
+        // Per-preset user-customized configs
+        let workoutPresetConfigs = {};
+        let currentEditPreset = null;
+
+        function loadWorkoutPresetConfigs() {
+            const stored = localStorage.getItem('workoutPresetConfigs');
+            if (stored) {
+                try { workoutPresetConfigs = JSON.parse(stored); } catch (e) { workoutPresetConfigs = {}; }
+            }
+            // Init missing presets + forward-compat (add new slides, remove obsolete)
+            WORKOUT_PRESETS.forEach(preset => {
+                if (!workoutPresetConfigs[preset.id]) {
+                    workoutPresetConfigs[preset.id] = JSON.parse(JSON.stringify(preset.config));
+                } else {
+                    const cfg = workoutPresetConfigs[preset.id];
+                    const storedSet = new Set(cfg.orderedSlides);
+                    preset.config.orderedSlides.forEach(s => { if (!storedSet.has(s)) cfg.orderedSlides.push(s); });
+                    cfg.orderedSlides = cfg.orderedSlides.filter(s => ALL_SLIDES.includes(s));
+                    cfg.disabledSlides = (cfg.disabledSlides || []).filter(s => ALL_SLIDES.includes(s));
+                }
+            });
+        }
+
+        function saveWorkoutPresetConfigs() {
+            localStorage.setItem('workoutPresetConfigs', JSON.stringify(workoutPresetConfigs));
+        }
 
         // Initialize app
         async function initApp() {
@@ -2013,6 +2584,8 @@
             }
             
             loadTheme();
+            loadWorkoutConfig();
+            loadWorkoutPresetConfigs();
             loadExerciseData();
             await loadHistory();
             await syncExerciseDataFromHistory();
@@ -2055,7 +2628,7 @@
                 // Restore the slide we were on
                 const savedSlide = localStorage.getItem('currentSlide');
                 if (savedSlide !== null) {
-                    currentSlide = parseInt(savedSlide);
+                    currentSlide = Math.min(parseInt(savedSlide), workoutSequence.length - 1);
                 }
                 
                 updateSlideNavigation();
@@ -2074,7 +2647,7 @@
 
         // Slide Navigation Functions
         function nextSlide() {
-            if (currentSlide < totalSlides - 1) {
+            if (currentSlide < workoutSequence.length - 1) {
                 currentSlide++;
                 localStorage.setItem('currentSlide', currentSlide);
                 updateSlideNavigation();
@@ -2094,7 +2667,7 @@
         }
 
         function goToSlide(index) {
-            if (index >= 0 && index < totalSlides) {
+            if (index >= 0 && index < workoutSequence.length) {
                 currentSlide = index;
                 localStorage.setItem('currentSlide', currentSlide);
                 updateSlideNavigation();
@@ -2108,8 +2681,9 @@
             const slides = document.querySelectorAll('.workout-slide');
             slides.forEach(slide => slide.classList.remove('active'));
             
-            // Show current slide
-            const currentSlideEl = document.querySelector(`.workout-slide[data-slide="${currentSlide}"]`);
+            // Show current slide via workoutSequence
+            const actualSlideNum = workoutSequence[currentSlide];
+            const currentSlideEl = document.querySelector(`.workout-slide[data-slide="${actualSlideNum}"]`);
             if (currentSlideEl) currentSlideEl.classList.add('active');
             
             // Update navigation buttons
@@ -2118,7 +2692,7 @@
             
             if (prevBtn) prevBtn.disabled = currentSlide === 0;
             if (nextBtn) {
-                if (currentSlide === totalSlides - 1) {
+                if (currentSlide === workoutSequence.length - 1) {
                     // Last slide - change to "Avsluta pass" button
                     nextBtn.textContent = '✅ Avsluta pass';
                     nextBtn.style.background = 'var(--success)';
@@ -2157,16 +2731,16 @@
             
             if (!progressDots) return;
             
-            // Create progress dots if not exists
-            if (progressDots.children.length === 0) {
-                for (let i = 0; i < totalSlides; i++) {
-                    const dot = document.createElement('div');
-                    dot.className = 'progress-dot';
-                    dot.textContent = (i + 1).toString();
-                    dot.onclick = () => goToSlide(i);
-                    dot.title = slideNames[i];
-                    progressDots.appendChild(dot);
-                }
+            // Always rebuild dots to reflect current sequence
+            progressDots.innerHTML = '';
+            for (let i = 0; i < workoutSequence.length; i++) {
+                const slideNum = workoutSequence[i];
+                const dot = document.createElement('div');
+                dot.className = 'progress-dot';
+                dot.textContent = (i + 1).toString();
+                dot.onclick = () => goToSlide(i);
+                dot.title = slideNames[slideNum];
+                progressDots.appendChild(dot);
             }
             
             // Update dots status
@@ -2174,21 +2748,19 @@
             dots.forEach((dot, index) => {
                 dot.classList.remove('active', 'completed');
                 
-                // Check if this slide is completed
-                const key = slideKeys[index];
+                const slideNum = workoutSequence[index];
+                const key = slideKeys[slideNum];
                 if (isSlideCompleted(key)) {
                     dot.classList.add('completed');
                 }
                 
-                // Mark current slide as active
                 if (index === currentSlide) {
                     dot.classList.add('active');
                 }
             });
             
-            // Update counter
             if (progressCounter) {
-                progressCounter.textContent = `Övning ${currentSlide + 1} / ${totalSlides}`;
+                progressCounter.textContent = `Övning ${currentSlide + 1} / ${workoutSequence.length}`;
             }
         }
 
@@ -2259,6 +2831,128 @@
             document.getElementById('menu-' + tabName)?.classList.add('active');
         }
 
+        // ===== WORKOUT CONFIG =====
+
+        function renderConfigPage() {
+            currentEditPreset ? renderPresetEditor(currentEditPreset) : renderPresetList();
+        }
+
+        function renderPresetList() {
+            const content = document.getElementById('config-content');
+            if (!content) return;
+
+            let html = '<div class="config-preset-list">';
+            WORKOUT_PRESETS.forEach(preset => {
+                const cfg = workoutPresetConfigs[preset.id] || preset.config;
+                const activeCount = cfg.orderedSlides.filter(s => !cfg.disabledSlides.includes(s)).length;
+                const isCustomized = JSON.stringify(cfg) !== JSON.stringify(preset.config);
+
+                html += `<div class="config-preset-row" onclick="editPreset('${preset.id}')">
+                    <div class="config-preset-row-emoji">${preset.emoji}</div>
+                    <div class="config-preset-row-info">
+                        <div class="config-preset-row-name">${preset.name}${isCustomized ? ' <span class="config-custom-badge">anpassad</span>' : ''}</div>
+                        <div class="config-preset-row-meta">${activeCount} övningar aktiva · ${preset.duration}</div>
+                    </div>
+                    <div class="config-preset-row-arrow">›</div>
+                </div>`;
+            });
+            html += '</div>';
+            content.innerHTML = html;
+        }
+
+        function renderPresetEditor(presetId) {
+            const preset = WORKOUT_PRESETS.find(p => p.id === presetId);
+            const cfg = workoutPresetConfigs[presetId];
+            const content = document.getElementById('config-content');
+            if (!content || !preset || !cfg) return;
+
+            const typeLabels = {
+                activity: '🔥 Aktivitet', lower: '🦵 Underkropp',
+                upper: '💪 Överkropp', core: '🧱 Bål'
+            };
+
+            let html = `
+                <button class="config-back-btn" onclick="exitPresetEditor()">← Alla pass</button>
+                <div class="config-preset-header">
+                    <span style="font-size:28px;">${preset.emoji}</span>
+                    <div>
+                        <div style="font-size:17px;font-weight:700;">${preset.name}</div>
+                        <div style="font-size:12px;color:var(--text-secondary);">${preset.duration}</div>
+                    </div>
+                </div>
+                <div class="config-list">`;
+
+            cfg.orderedSlides.forEach((slideNum, pos) => {
+                const name = slideNames[slideNum];
+                const type = typeLabels[slideTypes[slideNum]] || '';
+                const isEnabled = !cfg.disabledSlides.includes(slideNum);
+                const isFirst = pos === 0;
+                const isLast = pos === cfg.orderedSlides.length - 1;
+
+                html += `<div class="config-item ${isEnabled ? '' : 'config-disabled'}">
+                    <div class="config-move-btns">
+                        <button class="config-move-btn" onclick="movePresetSlideUp('${presetId}',${pos})" ${isFirst ? 'disabled' : ''}>▲</button>
+                        <button class="config-move-btn" onclick="movePresetSlideDown('${presetId}',${pos})" ${isLast ? 'disabled' : ''}>▼</button>
+                    </div>
+                    <div class="config-item-name">
+                        ${name}
+                        <div style="font-size:11px;color:var(--text-secondary);font-weight:400;margin-top:2px;">${type}</div>
+                    </div>
+                    <label class="config-toggle">
+                        <input type="checkbox" ${isEnabled ? 'checked' : ''} onchange="togglePresetSlide('${presetId}',${slideNum})">
+                        <span class="config-toggle-slider"></span>
+                    </label>
+                </div>`;
+            });
+
+            html += `</div>
+                <button class="config-reset-btn" onclick="resetPresetConfig('${presetId}')">🔄 Återställ ${preset.name} till standard</button>`;
+            content.innerHTML = html;
+        }
+
+        function editPreset(presetId) {
+            currentEditPreset = presetId;
+            renderConfigPage();
+        }
+
+        function exitPresetEditor() {
+            currentEditPreset = null;
+            renderConfigPage();
+        }
+
+        function togglePresetSlide(presetId, slideNum) {
+            const cfg = workoutPresetConfigs[presetId];
+            const idx = cfg.disabledSlides.indexOf(slideNum);
+            if (idx >= 0) cfg.disabledSlides.splice(idx, 1);
+            else cfg.disabledSlides.push(slideNum);
+            saveWorkoutPresetConfigs();
+            renderConfigPage();
+        }
+
+        function movePresetSlideUp(presetId, pos) {
+            const arr = workoutPresetConfigs[presetId].orderedSlides;
+            if (pos === 0) return;
+            [arr[pos - 1], arr[pos]] = [arr[pos], arr[pos - 1]];
+            saveWorkoutPresetConfigs();
+            renderConfigPage();
+        }
+
+        function movePresetSlideDown(presetId, pos) {
+            const arr = workoutPresetConfigs[presetId].orderedSlides;
+            if (pos >= arr.length - 1) return;
+            [arr[pos], arr[pos + 1]] = [arr[pos + 1], arr[pos]];
+            saveWorkoutPresetConfigs();
+            renderConfigPage();
+        }
+
+        function resetPresetConfig(presetId) {
+            const preset = WORKOUT_PRESETS.find(p => p.id === presetId);
+            if (!preset || !confirm(`Återställ ${preset.name} till standard?`)) return;
+            workoutPresetConfigs[presetId] = JSON.parse(JSON.stringify(preset.config));
+            saveWorkoutPresetConfigs();
+            renderConfigPage();
+        }
+
         // Tab switching
         function showTab(tabName) {
             // Hide all sections
@@ -2287,6 +2981,9 @@
                 buildHomeScreen();
             } else if (tabName === 'progression') {
                 loadProgressionSection();
+            } else if (tabName === 'config') {
+                currentEditPreset = null;
+                renderConfigPage();
             }
         }
 
@@ -2349,23 +3046,15 @@
                         });
                     }
                 } else if (sessionData[activity]) {
-                    const checkbox = document.getElementById(activity + '-done');
-                    if (checkbox) {
-                        checkbox.checked = sessionData[activity];
-                        
-                        // If checked, disable timer buttons and hide timer display
-                        if (sessionData[activity] && (activity === 'warmup' || activity === 'cardio')) {
-                            // Hide timer display
-                            const display = document.getElementById(activity + '-timer-display');
-                            if (display) {
-                                display.style.display = 'none';
-                            }
-                            
-                            const btn = document.getElementById(activity + '-timer-btn');
-                            if (btn) {
-                                btn.textContent = '✓ Färdig';
-                                btn.disabled = true;
-                            }
+                    // Activity already completed – show "advance" button state
+                    if (activity === 'warmup' || activity === 'cardio') {
+                        const display = document.getElementById(activity + '-timer-display');
+                        if (display) display.style.display = 'none';
+                        const btn = document.getElementById(activity + '-timer-btn');
+                        if (btn) {
+                            btn.textContent = '✅ Klar – Nästa →';
+                            btn.disabled = false;
+                            btn.onclick = () => markActivityDoneAndNext(activity);
                         }
                     }
                 }
@@ -2621,13 +3310,15 @@
             
             if (buttonElement) {
                 if (completedSets >= targetSets) {
-                    buttonElement.textContent = '✅ Alla set klara!';
+                    buttonElement.textContent = '✅ Alla set klara! – Nästa övning →';
                     buttonElement.classList.add('complete');
-                    buttonElement.disabled = true;
+                    buttonElement.disabled = false;
+                    buttonElement.onclick = nextSlide;
                 } else {
                     buttonElement.textContent = '✓ Markera set som klart';
                     buttonElement.classList.remove('complete');
                     buttonElement.disabled = false;
+                    buttonElement.onclick = () => completeSet(exercise);
                 }
             }
         }
@@ -2656,35 +3347,16 @@
             startSessionTimer();
             updateCompleteButton();
             updateProgressBar();
-            
-            // If checked, stop the timer and disable buttons
-            if (checked && (activity === 'warmup' || activity === 'cardio')) {
-                // Stop any running timer
-                if (activityTimers[activity] && activityTimers[activity].interval) {
-                    clearInterval(activityTimers[activity].interval);
-                    activityTimers[activity] = null;
-                }
-                
-                // Hide timer display
-                const display = document.getElementById(activity + '-timer-display');
-                if (display) {
-                    display.style.display = 'none';
-                }
-                
-                // Disable and reset buttons
-                if (activity === 'warmup' || activity === 'cardio') {
-                    const btn = document.getElementById(activity + '-timer-btn');
-                    if (btn) {
-                        btn.textContent = '✓ Färdig';
-                        btn.disabled = true;
-                    }
-                }
+            // Stop any running timer when marking done
+            if (checked && activityTimers[activity] && activityTimers[activity].interval) {
+                clearInterval(activityTimers[activity].interval);
+                activityTimers[activity] = null;
             }
-            
-            // If unchecked, re-enable buttons
-            if (!checked && (activity === 'warmup' || activity === 'cardio')) {
-                resetActivityTimerButtonsCustom(activity);
-            }
+        }
+
+        function markActivityDoneAndNext(activity) {
+            saveActivityCompletion(activity, true);
+            nextSlide();
         }
 
         // Toggle individual stretch exercise
@@ -2748,7 +3420,7 @@
             }
             
             // Update navigation button if on last slide
-            if (currentSlide === totalSlides - 1) {
+            if (currentSlide === workoutSequence.length - 1) {
                 const nextBtn = document.getElementById('next-btn');
                 if (nextBtn) {
                     nextBtn.disabled = !hasActivity;
@@ -2844,12 +3516,6 @@
                 updateSetCounter(exercise);
             });
 
-            // Reset warmup and cardio checkboxes
-            const warmupCheckbox = document.getElementById('warmup-done');
-            if (warmupCheckbox) warmupCheckbox.checked = false;
-            const cardioCheckbox = document.getElementById('cardio-done');
-            if (cardioCheckbox) cardioCheckbox.checked = false;
-            
             // Reset stretch exercises
             document.querySelectorAll('.stretch-item').forEach(item => {
                 item.classList.remove('completed');
@@ -2941,12 +3607,11 @@
             if (hasActiveSession) {
                 buttonsContainer.innerHTML = `
                     <button class="continue-workout-btn" onclick="continueWorkoutSession()">▶️ Fortsätt pågående pass</button>
-                    <button class="start-workout-btn" onclick="startWorkoutSession()">🚀 Starta nytt pass</button>
+                    <div class="preset-divider">— eller välj nytt passtyp —</div>
+                    ${buildPresetCardsHTML()}
                 `;
             } else {
-                buttonsContainer.innerHTML = `
-                    <button class="start-workout-btn" onclick="startWorkoutSession()">🚀 Starta träningspass</button>
-                `;
+                buttonsContainer.innerHTML = buildPresetCardsHTML();
             }
             
             // Calculate stats
@@ -3015,12 +3680,6 @@
                 updateSetCounter(exercise);
             });
             
-            // Reset warmup and cardio
-            const warmupCheckbox = document.getElementById('warmup-done');
-            if (warmupCheckbox) warmupCheckbox.checked = false;
-            const cardioCheckbox = document.getElementById('cardio-done');
-            if (cardioCheckbox) cardioCheckbox.checked = false;
-            
             // Reset stretch exercises
             document.querySelectorAll('.stretch-item').forEach(item => {
                 item.classList.remove('completed');
@@ -3041,6 +3700,50 @@
             menuShowTab('workout');
             
             window.scrollTo(0, 0);
+        }
+
+        function buildPresetCardsHTML() {
+            let html = '<div class="preset-cards">';
+            WORKOUT_PRESETS.forEach((preset, i) => {
+                if (i === 0) {
+                    html += `<div class="preset-card preset-featured" onclick="startWorkoutWithPreset('${preset.id}')">
+                        <div class="preset-card-emoji">${preset.emoji}</div>
+                        <div>
+                            <div class="preset-card-name">${preset.name}</div>
+                            <div class="preset-card-desc">${preset.description}</div>
+                            <div class="preset-card-duration">${preset.duration}</div>
+                        </div>
+                    </div>`;
+                } else {
+                    html += `<div class="preset-card" onclick="startWorkoutWithPreset('${preset.id}')">
+                        <div class="preset-card-emoji">${preset.emoji}</div>
+                        <div class="preset-card-name">${preset.name}</div>
+                        <div class="preset-card-desc">${preset.description}</div>
+                        <div class="preset-card-duration">${preset.duration}</div>
+                    </div>`;
+                }
+            });
+            html += '</div>';
+            return html;
+        }
+
+        function startWorkoutWithPreset(presetId) {
+            const preset = WORKOUT_PRESETS.find(p => p.id === presetId);
+            if (!preset) return;
+
+            // Check for active session
+            const sessionData = JSON.parse(localStorage.getItem('currentSession') || '{}');
+            let hasActiveSession = false;
+            exercises.forEach(ex => { if (sessionData[ex]?.completedSets > 0) hasActiveSession = true; });
+            if (sessionData.warmup || sessionData.cardio) hasActiveSession = true;
+
+            if (hasActiveSession && !confirm(`Starta ${preset.name}?\nPågående pass kommer att rensas.`)) return;
+
+            // Apply user-customized preset config
+            workoutConfig = JSON.parse(JSON.stringify(workoutPresetConfigs[presetId] || preset.config));
+            saveWorkoutConfig();
+
+            startWorkoutSession();
         }
 
         // Go to home screen
@@ -3121,9 +3824,12 @@
                 'benstrack': 'Bensträck',
                 'larcurl': 'Lårcurl',
                 'rodd': 'Sittande rodd',
-                'brostpress': 'Bröstpress',
+                'fly': 'Fly (Pec Deck)',
                 'axelpress': 'Axelpress',
-                'plank': 'Plankan'
+                'adduktor': 'Adduktor/Abduktor',
+                'latpull': 'Lat Pull',
+                'plank': 'Plankan',
+                'abcrunch': 'AB-crunch'
             };
             return names[exercise] || exercise;
         }
@@ -3306,19 +4012,16 @@
                     activityTimers[activity].interval = null;
                     activityTimers[activity].completed = true;
                     
-                    // Mark as complete
-                    const checkbox = document.getElementById(activity + '-done');
-                    if (checkbox && !checkbox.checked) {
-                        checkbox.checked = true;
-                        saveActivityCompletion(activity, true);
-                    }
-                    
-                    // Play sound and show alert
+                    // Mark done in session, play sound, update button to advance
+                    saveActivityCompletion(activity, true);
                     playSound();
-                    setTimeout(() => {
-                        alert(`✅ ${activity === 'warmup' ? 'Uppvärmning' : 'Konditionsavslut'} klar!`);
-                        display.style.display = 'none';
-                    }, 100);
+                    display.style.display = 'none';
+                    const doneBtn = document.getElementById(activity + '-timer-btn');
+                    if (doneBtn) {
+                        doneBtn.textContent = '✅ Klar – Nästa →';
+                        doneBtn.disabled = false;
+                        doneBtn.onclick = () => markActivityDoneAndNext(activity);
+                    }
                 }
             }, 100); // Update every 100ms for smoother countdown
 
@@ -3367,21 +4070,17 @@
                     clearInterval(activityTimers[activity].interval);
                     activityTimers[activity].interval = null;
                     activityTimers[activity].completed = true;
-                    
-                    // Mark as complete
-                    const checkbox = document.getElementById(activity + '-done');
-                    if (checkbox && !checkbox.checked) {
-                        checkbox.checked = true;
-                        saveActivityCompletion(activity, true);
-                    }
-                    
-                    // Play sound and show alert
+
+                    // Mark done, play sound, update button to advance
+                    saveActivityCompletion(activity, true);
                     playSound();
-                    setTimeout(() => {
-                        alert(`✅ ${activity === 'warmup' ? 'Uppvärmning' : 'Konditionsavslut'} klar!`);
-                        display.style.display = 'none';
-                        // Don't reset buttons - they're already disabled by saveActivityCompletion
-                    }, 100);
+                    display.style.display = 'none';
+                    const doneBtn = document.getElementById(activity + '-timer-btn');
+                    if (doneBtn) {
+                        doneBtn.textContent = '✅ Klar – Nästa →';
+                        doneBtn.disabled = false;
+                        doneBtn.onclick = () => markActivityDoneAndNext(activity);
+                    }
                 }
             }, 100); // Update every 100ms for smoother countdown
 
@@ -3444,6 +4143,7 @@
             if (btn) {
                 btn.textContent = '▶️ Starta timer';
                 btn.disabled = false;
+                btn.onclick = () => startActivityTimerCustom(activity);
             }
         }
 
@@ -3497,12 +4197,14 @@
 
         const PROG_INCREMENT = {
             benpress: 5, benstrack: 2.5, larcurl: 2.5,
-            rodd: 2.5, brostpress: 2.5, axelpress: 2.5, plank: 5
+            rodd: 2.5, fly: 2.5, axelpress: 2.5,
+            adduktor: 2.5, latpull: 2.5, plank: 5, abcrunch: 2.5
         };
 
         const PROG_TARGET_REPS = {
             benpress: 10, benstrack: 10, larcurl: 10,
-            rodd: 10, brostpress: 10, axelpress: 8, plank: 0
+            rodd: 10, fly: 10, axelpress: 8,
+            adduktor: 12, latpull: 10, plank: 0, abcrunch: 15
         };
 
         function calculateExerciseSuggestion(exerciseKey, history) {
@@ -3764,7 +4466,8 @@
         function buildWeeklyPlanHTML(history) {
             const shortNames = {
                 benpress: 'Benpr.', benstrack: 'B.sträck', larcurl: 'Lårcurl',
-                rodd: 'Rodd', brostpress: 'Bröstpr.', axelpress: 'Axelpr.', plank: 'Planka'
+                rodd: 'Rodd', fly: 'Fly', axelpress: 'Axelpr.',
+                adduktor: 'Add/Abd', latpull: 'LatPull', plank: 'Planka', abcrunch: 'AB-crunch'
             };
 
             // Start from suggested weights
@@ -3804,7 +4507,7 @@
         }
 
         function buildProgressChartHTML(history) {
-            const keyExercises = ['benpress', 'rodd', 'brostpress', 'axelpress'];
+            const keyExercises = ['benpress', 'rodd', 'fly', 'axelpress'];
             const sorted = [...history].sort((a, b) => a.timestamp - b.timestamp);
 
             let html = '<div class="progression-card"><h3>📊 Vikthistorik (senaste 8 pass)</h3>';
