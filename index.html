@@ -1570,11 +1570,52 @@
                                 </div>
                             </div>
                             
-                            <ul style="margin-bottom: 15px;">
-                                <li>Crosstrainer - mjukt för lederna</li>
-                                <li>Löpband - rask promenad</li>
-                                <li>Cykel - lätt motstånd</li>
+                            <ul style="margin-bottom: 10px;">
+                                <li>Gymalternativ: Crosstrainer, löpband eller cykel i lugnt tempo</li>
+                                <li>Hemma utan utrustning: följ cirkeln nedan i 3-5 min</li>
                             </ul>
+
+                            <div style="margin-bottom: 15px; padding: 10px; border: 1px solid var(--border); border-radius: 10px; background: var(--bg-secondary);">
+                                <div style="font-size: 13px; font-weight: 700; margin-bottom: 6px;">🏠 Hemma (utan utrustning)</div>
+                                <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.5;">
+                                    30 sek per övning, 2 varv:<br>
+                                    • Marsch på stället med armpendling (låg belastning)<br>
+                                    • Knäböj utan vikt (lugnt tempo)<br>
+                                    • Armcirklar framåt och bakåt (små till större cirklar)<br>
+                                    • Höftfällning (good morning utan vikt)<br>
+                                    • Lätt höga knän eller sidosteg
+                                </p>
+                            </div>
+
+                            <button class="instructions-toggle" onclick="toggleInstructions('warmup')" style="margin-bottom: 12px;">📖 Instruktioner för uppvärmning</button>
+                            <div class="instructions" id="warmup-instructions">
+                                <h4>Mål:</h4>
+                                <p>• Höj pulsen lätt<br>
+                                • Väck stora muskelgrupper<br>
+                                • Gör kroppen redo för styrkedel utan att bli trött</p>
+                                <h4>Så gör du (3-5 min):</h4>
+                                <p>• Starta lugnt första minuten och öka tempot lite efterhand<br>
+                                • Välj hemma eller gym enligt stegen nedan</p>
+                                <h4>Hemma steg för steg (utan utrustning):</h4>
+                                <p>• Sätt en timer på 30 sekunder per övning<br>
+                                • Kör i ordning: marsch på stället -> knäböj utan vikt -> armcirklar -> höftfällning -> lätta höga knän eller sidosteg<br>
+                                • Vila 15-20 sekunder vid behov och kör totalt 2 varv<br>
+                                • Avsluta med 20 sekunder djup andning och skaka loss armar/ben</p>
+                                <h4>Individuella moment hemma (så gör du):</h4>
+                                <p>• <strong>Marsch på stället med armpendling:</strong> Gå på stället med mjuka steg och pendla armarna naturligt. Håll lätt tempo.<br>
+                                • <strong>Knäböj utan vikt:</strong> Stå axelbrett, sitt ner som till en stol och res dig upp igen. Håll ryggen rak.<br>
+                                • <strong>Armcirklar framåt/bakåt:</strong> Sträck armarna åt sidorna och gör små cirklar i 15 sek framåt, 15 sek bakåt.<br>
+                                • <strong>Höftfällning (good morning utan vikt):</strong> Stå med lätt böjda knän, händer på höfterna. Fäll överkroppen framåt genom att skjuta höften bakåt, håll ryggen rak, stanna när du känner lätt sträck i baksida lår och res dig sedan upp igen. Ingen vikt behövs.<br>
+                                • <strong>Lätta höga knän eller sidosteg:</strong> Antingen lyft knäna växelvis till bekväm höjd eller ta snabba sidosteg höger/vänster.</p>
+                                <h4>Gymalternativ:</h4>
+                                <p>• Välj crosstrainer, löpband eller cykel i jämnt prattempo i 3-5 minuter</p>
+                                <h4>Tänk på:</h4>
+                                <p>• Du ska bli varm och lätt andfådd, inte slutkörd<br>
+                                • Håll rörelserna mjuka och kontrollerade<br>
+                                • Om något gör ont i lederna, sänk tempo eller rörelseomfång</p>
+                                <h4>Känsla:</h4>
+                                <p>Efter uppvärmningen ska kroppen kännas varm, mjuk och redo att börja första övningen.</p>
+                            </div>
                             
                             <div id="warmup-timer-display" class="activity-timer-display" style="display: none;">
                                 <div class="activity-timer-text">⏱️ <span id="warmup-timer-value">5:00</span></div>
@@ -2297,32 +2338,453 @@
                     <div class="slide-content">
                         <div class="stretch-card">
                             <h3 style="margin-bottom: 10px;">🧘 Stretch – 2-5 min</h3>
-                            <p style="margin-bottom: 15px; color: var(--text-secondary);">Håll varje stretch 20-30 sekunder</p>
+                            <p id="stretch-intro-text" style="margin-bottom: 15px; color: var(--text-secondary);">Håll varje stretch 20-30 sekunder</p>
                             <div style="margin-bottom: 15px;">
-                                <div class="stretch-item" onclick="toggleStretch('framsida')">
+                                <div class="stretch-item" data-stretch="framsida" onclick="toggleStretch('framsida')">
                                     <div class="stretch-checkbox"></div>
                                     <div class="stretch-text"><strong>Framsida lår:</strong> Stå upp, dra hälen mot rumpan</div>
                                 </div>
-                                <div class="stretch-item" onclick="toggleStretch('baksida')">
+                                <div class="stretch-item" data-stretch="baksida" onclick="toggleStretch('baksida')">
                                     <div class="stretch-checkbox"></div>
                                     <div class="stretch-text"><strong>Baksida lår:</strong> Sträck ett ben, fäll fram med rak rygg</div>
                                 </div>
-                                <div class="stretch-item" onclick="toggleStretch('rumpa')">
+                                <div class="stretch-item" data-stretch="rumpa" onclick="toggleStretch('rumpa')">
                                     <div class="stretch-checkbox"></div>
                                     <div class="stretch-text"><strong>Rumpa:</strong> Lägg ena foten över knät, luta framåt</div>
                                 </div>
-                                <div class="stretch-item" onclick="toggleStretch('brost')">
+                                <div class="stretch-item" data-stretch="brost" onclick="toggleStretch('brost')">
                                     <div class="stretch-checkbox"></div>
                                     <div class="stretch-text"><strong>Bröst:</strong> Fläta händerna bakom ryggen, sträck bakåt</div>
                                 </div>
-                                <div class="stretch-item" onclick="toggleStretch('axlar')">
+                                <div class="stretch-item" data-stretch="axlar" onclick="toggleStretch('axlar')">
                                     <div class="stretch-checkbox"></div>
                                     <div class="stretch-text"><strong>Axlar:</strong> För armen över bröstet, håll med andra handen</div>
                                 </div>
-                                <div class="stretch-item" onclick="toggleStretch('rygg')">
+                                <div class="stretch-item" data-stretch="rygg" onclick="toggleStretch('rygg')">
                                     <div class="stretch-checkbox"></div>
                                     <div class="stretch-text"><strong>Rygg:</strong> Sträck armarna fram, runda ryggen</div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 13: Goblet squat hemma -->
+                <div class="workout-slide" data-slide="13">
+                    <div class="slide-content">
+                        <h2 style="margin-bottom: 12px; font-size: 18px; color: var(--text-secondary);">🏠 HEMMA - BEN</h2>
+                        <div class="exercise-card">
+                            <div class="exercise-header">
+                                <div>
+                                    <div class="exercise-title">Goblet squat</div>
+                                    <div class="exercise-target">Framsida lår, rumpa</div>
+                                </div>
+                                <div class="exercise-icon">🏠</div>
+                            </div>
+
+                            <div class="weight-input-group">
+                                <div class="input-wrapper">
+                                    <div class="input-label">Vikt (kg)</div>
+                                    <input type="number" class="weight-input" id="gobletsquat-weight" value="13.8" step="0.1" onchange="saveExerciseData('gobletsquat', 'weight', this.value)">
+                                </div>
+                                <div class="input-wrapper">
+                                    <div class="input-label">Set</div>
+                                    <input type="number" class="weight-input" id="gobletsquat-sets" value="2" onchange="saveExerciseData('gobletsquat', 'sets', this.value)">
+                                </div>
+                                <div class="input-wrapper">
+                                    <div class="input-label">Reps</div>
+                                    <input type="number" class="weight-input" id="gobletsquat-reps" value="10" onchange="saveExerciseData('gobletsquat', 'reps', this.value)">
+                                </div>
+                            </div>
+
+                            <div class="sets-container">
+                                <div class="set-counter">
+                                    <div class="set-counter-text">Genomförda set</div>
+                                    <div class="set-counter-value" id="gobletsquat-counter">0 / 2</div>
+                                </div>
+                                <button class="set-button" id="gobletsquat-set-btn" onclick="completeSet('gobletsquat')">
+                                    ✓ Markera set som klart
+                                </button>
+
+                                <div class="rest-timer-container" id="gobletsquat-rest-timer">
+                                    <div class="rest-timer-display" id="gobletsquat-rest-display">⏱️ 0:45</div>
+                                    <div class="rest-timer-buttons">
+                                        <button class="rest-timer-btn pause" id="gobletsquat-rest-pause" onclick="pauseRestTimer('gobletsquat')">⏸️ Pausa</button>
+                                        <button class="rest-timer-btn skip" onclick="skipRestTimer('gobletsquat')">⏭️ Hoppa över</button>
+                                    </div>
+                                </div>
+
+                                <button class="timer-btn reset" onclick="resetSetCounter('gobletsquat')" style="margin-top: 5px;">
+                                    🔄 Återställ set
+                                </button>
+                            </div>
+
+                            <button class="instructions-toggle" onclick="toggleInstructions('gobletsquat')">📖 Instruktioner</button>
+                            <div class="instructions" id="gobletsquat-instructions">
+                                <h4>Vad det tränar:</h4>
+                                <p>Framsida lår, rumpa och baksida lår.</p>
+                                <h4>Så gör du:</h4>
+                                <p>• Stå med fötterna lite bredare än höftbrett<br>
+                                • Håll hanteln med båda händer nära bröstet<br>
+                                • Böj knäna och sitt ner som om du sätter dig på en stol<br>
+                                • Gå ner så långt du kan med rak rygg<br>
+                                • Tryck dig upp igen genom hälarna</p>
+                                <h4>Tänk på:</h4>
+                                <p>• Håll bröstet uppe och ryggen rak<br>
+                                • Knäna ska peka i samma riktning som tårna<br>
+                                • Kör lugnt tempo: ner kontrollerat, upp med kraft</p>
+                                <h4>Känsla:</h4>
+                                <p>Det ska kännas tydligt i låren och rumpan, inte i knäna eller ländryggen.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 14: Enarms rodd hemma -->
+                <div class="workout-slide" data-slide="14">
+                    <div class="slide-content">
+                        <h2 style="margin-bottom: 12px; font-size: 18px; color: var(--text-secondary);">🏠 HEMMA - RYGG</h2>
+                        <div class="exercise-card">
+                            <div class="exercise-header">
+                                <div>
+                                    <div class="exercise-title">Enarms rodd</div>
+                                    <div class="exercise-target">Övre rygg, baksida axlar</div>
+                                </div>
+                                <div class="exercise-icon">🏠</div>
+                            </div>
+
+                            <div class="weight-input-group">
+                                <div class="input-wrapper">
+                                    <div class="input-label">Vikt (kg)</div>
+                                    <input type="number" class="weight-input" id="enarmsrodd-weight" value="13.8" step="0.1" onchange="saveExerciseData('enarmsrodd', 'weight', this.value)">
+                                </div>
+                                <div class="input-wrapper">
+                                    <div class="input-label">Set</div>
+                                    <input type="number" class="weight-input" id="enarmsrodd-sets" value="2" onchange="saveExerciseData('enarmsrodd', 'sets', this.value)">
+                                </div>
+                                <div class="input-wrapper">
+                                    <div class="input-label">Reps/arm</div>
+                                    <input type="number" class="weight-input" id="enarmsrodd-reps" value="10" onchange="saveExerciseData('enarmsrodd', 'reps', this.value)">
+                                </div>
+                            </div>
+
+                            <div class="sets-container">
+                                <div class="set-counter">
+                                    <div class="set-counter-text">Genomförda set</div>
+                                    <div class="set-counter-value" id="enarmsrodd-counter">0 / 2</div>
+                                </div>
+                                <button class="set-button" id="enarmsrodd-set-btn" onclick="completeSet('enarmsrodd')">
+                                    ✓ Markera set som klart
+                                </button>
+
+                                <div class="rest-timer-container" id="enarmsrodd-rest-timer">
+                                    <div class="rest-timer-display" id="enarmsrodd-rest-display">⏱️ 0:45</div>
+                                    <div class="rest-timer-buttons">
+                                        <button class="rest-timer-btn pause" id="enarmsrodd-rest-pause" onclick="pauseRestTimer('enarmsrodd')">⏸️ Pausa</button>
+                                        <button class="rest-timer-btn skip" onclick="skipRestTimer('enarmsrodd')">⏭️ Hoppa över</button>
+                                    </div>
+                                </div>
+
+                                <button class="timer-btn reset" onclick="resetSetCounter('enarmsrodd')" style="margin-top: 5px;">
+                                    🔄 Återställ set
+                                </button>
+                            </div>
+
+                            <button class="instructions-toggle" onclick="toggleInstructions('enarmsrodd')">📖 Instruktioner</button>
+                            <div class="instructions" id="enarmsrodd-instructions">
+                                <h4>Vad det tränar:</h4>
+                                <p>Övre rygg och baksida axlar, bra för hållning.</p>
+                                <h4>Så gör du:</h4>
+                                <p>• Stöd ena handen och samma sidas knä på en stol eller soffa<br>
+                                • Ha rak rygg och hanteln hängande rakt ner<br>
+                                • Dra hanteln upp mot sidan av magen/höften<br>
+                                • Sänk långsamt till start och upprepa, byt sedan arm</p>
+                                <h4>Tänk på:</h4>
+                                <p>• Dra armbågen bakåt, inte bara handen uppåt<br>
+                                • Undvik att vrida överkroppen<br>
+                                • Pausa kort i toppläget för bättre kontakt</p>
+                                <h4>Känsla:</h4>
+                                <p>Det ska kännas mellan skulderbladen och på baksidan av axeln.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 15: Axelpress hemma -->
+                <div class="workout-slide" data-slide="15">
+                    <div class="slide-content">
+                        <h2 style="margin-bottom: 12px; font-size: 18px; color: var(--text-secondary);">🏠 HEMMA - AXLAR</h2>
+                        <div class="exercise-card">
+                            <div class="exercise-header">
+                                <div>
+                                    <div class="exercise-title">Axelpress hemma</div>
+                                    <div class="exercise-target">Axlar, triceps</div>
+                                </div>
+                                <div class="exercise-icon">🏠</div>
+                            </div>
+
+                            <div class="weight-input-group">
+                                <div class="input-wrapper">
+                                    <div class="input-label">Vikt (kg)</div>
+                                    <input type="number" class="weight-input" id="hemaxelpress-weight" value="3" step="0.1" onchange="saveExerciseData('hemaxelpress', 'weight', this.value)">
+                                </div>
+                                <div class="input-wrapper">
+                                    <div class="input-label">Set</div>
+                                    <input type="number" class="weight-input" id="hemaxelpress-sets" value="2" onchange="saveExerciseData('hemaxelpress', 'sets', this.value)">
+                                </div>
+                                <div class="input-wrapper">
+                                    <div class="input-label">Reps</div>
+                                    <input type="number" class="weight-input" id="hemaxelpress-reps" value="12" onchange="saveExerciseData('hemaxelpress', 'reps', this.value)">
+                                </div>
+                            </div>
+
+                            <div class="sets-container">
+                                <div class="set-counter">
+                                    <div class="set-counter-text">Genomförda set</div>
+                                    <div class="set-counter-value" id="hemaxelpress-counter">0 / 2</div>
+                                </div>
+                                <button class="set-button" id="hemaxelpress-set-btn" onclick="completeSet('hemaxelpress')">
+                                    ✓ Markera set som klart
+                                </button>
+
+                                <div class="rest-timer-container" id="hemaxelpress-rest-timer">
+                                    <div class="rest-timer-display" id="hemaxelpress-rest-display">⏱️ 0:45</div>
+                                    <div class="rest-timer-buttons">
+                                        <button class="rest-timer-btn pause" id="hemaxelpress-rest-pause" onclick="pauseRestTimer('hemaxelpress')">⏸️ Pausa</button>
+                                        <button class="rest-timer-btn skip" onclick="skipRestTimer('hemaxelpress')">⏭️ Hoppa över</button>
+                                    </div>
+                                </div>
+
+                                <button class="timer-btn reset" onclick="resetSetCounter('hemaxelpress')" style="margin-top: 5px;">
+                                    🔄 Återställ set
+                                </button>
+                            </div>
+
+                            <button class="instructions-toggle" onclick="toggleInstructions('hemaxelpress')">📖 Instruktioner</button>
+                            <div class="instructions" id="hemaxelpress-instructions">
+                                <h4>Vad det tränar:</h4>
+                                <p>Axlar och triceps.</p>
+                                <h4>Så gör du:</h4>
+                                <p>• Stå eller sitt med rak rygg och lätt spänd mage<br>
+                                • Håll hantlarna vid axlarna, armbågarna under handlederna<br>
+                                • Pressa hantlarna rakt upp över huvudet<br>
+                                • Sänk långsamt tillbaka till axelhöjd</p>
+                                <h4>Tänk på:</h4>
+                                <p>• Pressa uppåt, inte framåt<br>
+                                • Undvik att svanka i ländryggen<br>
+                                • Välj hellre 1 kg eller 3 kg med fin teknik än för tung vikt</p>
+                                <h4>Känsla:</h4>
+                                <p>Det ska kännas på utsidan av axlarna och lätt i triceps.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 16: Höftlyft hemma -->
+                <div class="workout-slide" data-slide="16">
+                    <div class="slide-content">
+                        <h2 style="margin-bottom: 12px; font-size: 18px; color: var(--text-secondary);">🏠 HEMMA - RUMPA</h2>
+                        <div class="exercise-card">
+                            <div class="exercise-header">
+                                <div>
+                                    <div class="exercise-title">Höftlyft</div>
+                                    <div class="exercise-target">Rumpa, baksida lår</div>
+                                </div>
+                                <div class="exercise-icon">🏠</div>
+                            </div>
+
+                            <div class="weight-input-group">
+                                <div class="input-wrapper">
+                                    <div class="input-label">Vikt (kg)</div>
+                                    <input type="number" class="weight-input" id="hoftlyft-weight" value="13.8" step="0.1" onchange="saveExerciseData('hoftlyft', 'weight', this.value)">
+                                </div>
+                                <div class="input-wrapper">
+                                    <div class="input-label">Set</div>
+                                    <input type="number" class="weight-input" id="hoftlyft-sets" value="2" onchange="saveExerciseData('hoftlyft', 'sets', this.value)">
+                                </div>
+                                <div class="input-wrapper">
+                                    <div class="input-label">Reps</div>
+                                    <input type="number" class="weight-input" id="hoftlyft-reps" value="12" onchange="saveExerciseData('hoftlyft', 'reps', this.value)">
+                                </div>
+                            </div>
+
+                            <div class="sets-container">
+                                <div class="set-counter">
+                                    <div class="set-counter-text">Genomförda set</div>
+                                    <div class="set-counter-value" id="hoftlyft-counter">0 / 2</div>
+                                </div>
+                                <button class="set-button" id="hoftlyft-set-btn" onclick="completeSet('hoftlyft')">
+                                    ✓ Markera set som klart
+                                </button>
+
+                                <div class="rest-timer-container" id="hoftlyft-rest-timer">
+                                    <div class="rest-timer-display" id="hoftlyft-rest-display">⏱️ 0:45</div>
+                                    <div class="rest-timer-buttons">
+                                        <button class="rest-timer-btn pause" id="hoftlyft-rest-pause" onclick="pauseRestTimer('hoftlyft')">⏸️ Pausa</button>
+                                        <button class="rest-timer-btn skip" onclick="skipRestTimer('hoftlyft')">⏭️ Hoppa över</button>
+                                    </div>
+                                </div>
+
+                                <button class="timer-btn reset" onclick="resetSetCounter('hoftlyft')" style="margin-top: 5px;">
+                                    🔄 Återställ set
+                                </button>
+                            </div>
+
+                            <button class="instructions-toggle" onclick="toggleInstructions('hoftlyft')">📖 Instruktioner</button>
+                            <div class="instructions" id="hoftlyft-instructions">
+                                <h4>Vad det tränar:</h4>
+                                <p>Rumpa och baksida lår.</p>
+                                <h4>Så gör du:</h4>
+                                <p>• Ligg på rygg med böjda knän och fötterna i golvet nära rumpan<br>
+                                • Lägg hanteln över höfterna om du vill ha motstånd<br>
+                                • Pressa genom hälarna och lyft höfterna upp mot taket<br>
+                                • Spänn rumpan i toppläget och sänk långsamt tillbaka</p>
+                                <h4>Tänk på:</h4>
+                                <p>• Håll hakan lätt in mot bröstet och revbenen nere<br>
+                                • Gå inte högre än att du kan hålla bålen stabil<br>
+                                • Om ländryggen känns, sänk höjden och fokusera på rumpan</p>
+                                <h4>Känsla:</h4>
+                                <p>Det ska kännas tydligt i rumpan, inte i ländryggen.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 17: Bröstpress golv hemma -->
+                <div class="workout-slide" data-slide="17">
+                    <div class="slide-content">
+                        <h2 style="margin-bottom: 12px; font-size: 18px; color: var(--text-secondary);">🏠 HEMMA - BRÖST</h2>
+                        <div class="exercise-card">
+                            <div class="exercise-header">
+                                <div>
+                                    <div class="exercise-title">Bröstpress golv</div>
+                                    <div class="exercise-target">Bröst, triceps</div>
+                                </div>
+                                <div class="exercise-icon">🏠</div>
+                            </div>
+
+                            <div class="weight-input-group">
+                                <div class="input-wrapper">
+                                    <div class="input-label">Vikt (kg)</div>
+                                    <input type="number" class="weight-input" id="brostpressgolv-weight" value="3" step="0.1" onchange="saveExerciseData('brostpressgolv', 'weight', this.value)">
+                                </div>
+                                <div class="input-wrapper">
+                                    <div class="input-label">Set</div>
+                                    <input type="number" class="weight-input" id="brostpressgolv-sets" value="2" onchange="saveExerciseData('brostpressgolv', 'sets', this.value)">
+                                </div>
+                                <div class="input-wrapper">
+                                    <div class="input-label">Reps</div>
+                                    <input type="number" class="weight-input" id="brostpressgolv-reps" value="10" onchange="saveExerciseData('brostpressgolv', 'reps', this.value)">
+                                </div>
+                            </div>
+
+                            <div class="sets-container">
+                                <div class="set-counter">
+                                    <div class="set-counter-text">Genomförda set</div>
+                                    <div class="set-counter-value" id="brostpressgolv-counter">0 / 2</div>
+                                </div>
+                                <button class="set-button" id="brostpressgolv-set-btn" onclick="completeSet('brostpressgolv')">
+                                    ✓ Markera set som klart
+                                </button>
+
+                                <div class="rest-timer-container" id="brostpressgolv-rest-timer">
+                                    <div class="rest-timer-display" id="brostpressgolv-rest-display">⏱️ 0:45</div>
+                                    <div class="rest-timer-buttons">
+                                        <button class="rest-timer-btn pause" id="brostpressgolv-rest-pause" onclick="pauseRestTimer('brostpressgolv')">⏸️ Pausa</button>
+                                        <button class="rest-timer-btn skip" onclick="skipRestTimer('brostpressgolv')">⏭️ Hoppa över</button>
+                                    </div>
+                                </div>
+
+                                <button class="timer-btn reset" onclick="resetSetCounter('brostpressgolv')" style="margin-top: 5px;">
+                                    🔄 Återställ set
+                                </button>
+                            </div>
+
+                            <button class="instructions-toggle" onclick="toggleInstructions('brostpressgolv')">📖 Instruktioner</button>
+                            <div class="instructions" id="brostpressgolv-instructions">
+                                <h4>Vad det tränar:</h4>
+                                <p>Bröst och triceps.</p>
+                                <h4>Så gör du:</h4>
+                                <p>• Ligg på rygg med böjda knän och fötterna i golvet<br>
+                                • Håll en hantel i varje hand med armbågarna mot golvet<br>
+                                • Pressa hantlarna rakt upp tills armarna nästan är raka<br>
+                                • Sänk långsamt tillbaka tills armbågarna nuddar golvet</p>
+                                <h4>Tänk på:</h4>
+                                <p>• Håll handlederna raka och stabila<br>
+                                • Studsa inte i bottenläget<br>
+                                • Tänk att du pressar bort golvet från dig</p>
+                                <h4>Känsla:</h4>
+                                <p>Det ska kännas i bröstet och armarna, utan stickande känsla i axlarna.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 18: Deadbug hemma -->
+                <div class="workout-slide" data-slide="18">
+                    <div class="slide-content">
+                        <h2 style="margin-bottom: 12px; font-size: 18px; color: var(--text-secondary);">🏠 HEMMA - CORE</h2>
+                        <div class="exercise-card">
+                            <div class="exercise-header">
+                                <div>
+                                    <div class="exercise-title">Deadbug</div>
+                                    <div class="exercise-target">Mage, stabilitet</div>
+                                </div>
+                                <div class="exercise-icon">🏠</div>
+                            </div>
+
+                            <div class="weight-input-group">
+                                <div class="input-wrapper">
+                                    <div class="input-label">Vikt (kg)</div>
+                                    <input type="number" class="weight-input" id="deadbug-weight" value="0" step="0.5" onchange="saveExerciseData('deadbug', 'weight', this.value)">
+                                </div>
+                                <div class="input-wrapper">
+                                    <div class="input-label">Set</div>
+                                    <input type="number" class="weight-input" id="deadbug-sets" value="2" onchange="saveExerciseData('deadbug', 'sets', this.value)">
+                                </div>
+                                <div class="input-wrapper">
+                                    <div class="input-label">Reps/sida</div>
+                                    <input type="number" class="weight-input" id="deadbug-reps" value="8" onchange="saveExerciseData('deadbug', 'reps', this.value)">
+                                </div>
+                            </div>
+
+                            <div class="sets-container">
+                                <div class="set-counter">
+                                    <div class="set-counter-text">Genomförda set</div>
+                                    <div class="set-counter-value" id="deadbug-counter">0 / 2</div>
+                                </div>
+                                <button class="set-button" id="deadbug-set-btn" onclick="completeSet('deadbug')">
+                                    ✓ Markera set som klart
+                                </button>
+
+                                <div class="rest-timer-container" id="deadbug-rest-timer">
+                                    <div class="rest-timer-display" id="deadbug-rest-display">⏱️ 0:45</div>
+                                    <div class="rest-timer-buttons">
+                                        <button class="rest-timer-btn pause" id="deadbug-rest-pause" onclick="pauseRestTimer('deadbug')">⏸️ Pausa</button>
+                                        <button class="rest-timer-btn skip" onclick="skipRestTimer('deadbug')">⏭️ Hoppa över</button>
+                                    </div>
+                                </div>
+
+                                <button class="timer-btn reset" onclick="resetSetCounter('deadbug')" style="margin-top: 5px;">
+                                    🔄 Återställ set
+                                </button>
+                            </div>
+
+                            <button class="instructions-toggle" onclick="toggleInstructions('deadbug')">📖 Instruktioner</button>
+                            <div class="instructions" id="deadbug-instructions">
+                                <h4>Vad det tränar:</h4>
+                                <p>Mage, djup bålstabilitet och kontroll.</p>
+                                <h4>Så gör du:</h4>
+                                <p>• Ligg på rygg med knän i 90 grader och armarna rakt upp<br>
+                                • Spänn magen lätt så ländryggen ligger kvar i golvet<br>
+                                • Sträck ut motsatt arm och ben långsamt<br>
+                                • Gå tillbaka till start och byt sida</p>
+                                <h4>Tänk på:</h4>
+                                <p>• Rör dig långsamt och kontrollerat hela tiden<br>
+                                • Om ryggen lyfter från golvet, gör kortare rörelse<br>
+                                • Fokusera på kvalitet före tempo</p>
+                                <h4>Känsla:</h4>
+                                <p>Det ska kännas som ett jämnt arbete i magen under hela setet.</p>
                             </div>
                         </div>
                     </div>
@@ -2455,20 +2917,28 @@
         let activityTimers = {}; // Store activity timer intervals
         let restTimers = {}; // Store rest timer intervals per exercise
         let restTimerTimeouts = {}; // Store setTimeout IDs for hiding timers
-        const exercises = ['benpress', 'rodd', 'benstrack', 'fly', 'larcurl', 'axelpress', 'adduktor', 'latpull', 'plank', 'abcrunch'];
+        const exercises = ['benpress', 'rodd', 'benstrack', 'fly', 'larcurl', 'axelpress', 'adduktor', 'latpull', 'plank', 'abcrunch', 'gobletsquat', 'enarmsrodd', 'hemaxelpress', 'hoftlyft', 'brostpressgolv', 'deadbug'];
         const activities = ['warmup', 'cardio', 'stretch'];
         const stretchExercises = ['framsida', 'baksida', 'rumpa', 'brost', 'axlar', 'rygg'];
         
         // Slide navigation
         let currentSlide = 0;
-        const totalSlides = 13; // total number of HTML slides (do not change)
-        const slideNames = ['Uppvärmning', 'Benpress', 'Rodd', 'Bensträck', 'Fly', 'Lårcurl', 'Axelpress', 'Adduktor/Abduktor', 'Lat Pull', 'Plankan', 'AB-crunch', 'Kondition', 'Stretch'];
-        const slideKeys = ['warmup', 'benpress', 'rodd', 'benstrack', 'fly', 'larcurl', 'axelpress', 'adduktor', 'latpull', 'plank', 'abcrunch', 'cardio', 'stretch'];
-        const slideTypes = ['activity', 'lower', 'upper', 'lower', 'upper', 'lower', 'upper', 'lower', 'upper', 'core', 'core', 'activity', 'activity'];
-        const ALL_SLIDES = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+        const totalSlides = 19;
+        const slideNames = ['Uppvärmning', 'Benpress', 'Rodd', 'Bensträck', 'Fly', 'Lårcurl', 'Axelpress', 'Adduktor/Abduktor', 'Lat Pull', 'Plankan', 'AB-crunch', 'Kondition', 'Stretch', 'Goblet squat', 'Enarms rodd', 'Axelpress hemma', 'Höftlyft', 'Bröstpress golv', 'Deadbug'];
+        const slideKeys = ['warmup', 'benpress', 'rodd', 'benstrack', 'fly', 'larcurl', 'axelpress', 'adduktor', 'latpull', 'plank', 'abcrunch', 'cardio', 'stretch', 'gobletsquat', 'enarmsrodd', 'hemaxelpress', 'hoftlyft', 'brostpressgolv', 'deadbug'];
+        const slideTypes = ['activity', 'lower', 'upper', 'lower', 'upper', 'lower', 'upper', 'lower', 'upper', 'core', 'core', 'activity', 'activity', 'lower', 'upper', 'upper', 'lower', 'upper', 'core'];
+        const ALL_SLIDES = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18];
 
         // Workout type presets
         const WORKOUT_PRESETS = [
+            {
+                id: 'home_dumbbells',
+                name: 'Hemma - Lösa Vikter',
+                emoji: '🏠',
+                description: 'Helkropp hemma med hantlar + core',
+                duration: '~20-25 min',
+                config: { orderedSlides: [0,13,14,15,16,17,18,12], disabledSlides: [] }
+            },
             {
                 id: 'fullbody',
                 name: 'Helkropp Styrka',
@@ -2538,6 +3008,60 @@
             workoutSequence = workoutConfig.orderedSlides.filter(
                 s => !workoutConfig.disabledSlides.includes(s)
             );
+            updateStretchRecommendations();
+        }
+
+        function getStretchItemElement(stretchName) {
+            return document.querySelector(`.stretch-item[data-stretch="${stretchName}"]`);
+        }
+
+        function getRelevantStretchExercises() {
+            const typeSet = new Set(workoutSequence.map(s => slideTypes[s]));
+            const relevant = new Set();
+
+            if (typeSet.has('lower')) {
+                relevant.add('framsida');
+                relevant.add('baksida');
+                relevant.add('rumpa');
+            }
+            if (typeSet.has('upper')) {
+                relevant.add('brost');
+                relevant.add('axlar');
+                relevant.add('rygg');
+            }
+            if (typeSet.has('core')) {
+                relevant.add('rygg');
+            }
+
+            if (relevant.size === 0) {
+                return [...stretchExercises];
+            }
+
+            return stretchExercises.filter(s => relevant.has(s));
+        }
+
+        function updateStretchRecommendations() {
+            const relevant = getRelevantStretchExercises();
+            const sessionData = JSON.parse(localStorage.getItem('currentSession') || '{}');
+
+            stretchExercises.forEach(stretch => {
+                const item = getStretchItemElement(stretch);
+                if (!item) return;
+
+                const shouldShow = relevant.includes(stretch);
+                item.style.display = shouldShow ? '' : 'none';
+
+                if (shouldShow && sessionData.stretchExercises?.[stretch]) {
+                    item.classList.add('completed');
+                } else {
+                    item.classList.remove('completed');
+                }
+            });
+
+            const intro = document.getElementById('stretch-intro-text');
+            if (intro) {
+                intro.textContent = `Anpassad för detta pass: ${relevant.length} stretchövningar. Håll varje stretch 20-30 sekunder.`;
+            }
         }
 
         function saveWorkoutConfig() {
@@ -2775,8 +3299,9 @@
             // Check stretch - all individual stretches must be done
             if (key === 'stretch') {
                 if (!sessionData.stretchExercises) return false;
-                const completedCount = stretchExercises.filter(ex => sessionData.stretchExercises[ex]).length;
-                return completedCount === stretchExercises.length;
+                const relevant = getRelevantStretchExercises();
+                const completedCount = relevant.filter(ex => sessionData.stretchExercises[ex]).length;
+                return relevant.length > 0 && completedCount === relevant.length;
             }
             
             // Check exercises
@@ -3033,13 +3558,15 @@
                 updateSetCounter(exercise);
             });
 
+            updateStretchRecommendations();
+
             // Load activity checkboxes
             activities.forEach(activity => {
                 if (activity === 'stretch') {
                     // Load individual stretch exercises
                     if (sessionData.stretchExercises) {
                         stretchExercises.forEach(stretch => {
-                            const stretchItem = document.querySelector(`.stretch-item[onclick*="${stretch}"]`);
+                            const stretchItem = getStretchItemElement(stretch);
                             if (stretchItem && sessionData.stretchExercises[stretch]) {
                                 stretchItem.classList.add('completed');
                             }
@@ -3372,7 +3899,7 @@
             sessionData.stretchExercises[stretchName] = !sessionData.stretchExercises[stretchName];
             
             // Update UI
-            const stretchItem = document.querySelector(`.stretch-item[onclick*="${stretchName}"]`);
+            const stretchItem = getStretchItemElement(stretchName);
             if (stretchItem) {
                 if (sessionData.stretchExercises[stretchName]) {
                     stretchItem.classList.add('completed');
@@ -3459,7 +3986,8 @@
                 duration: durationMinutes,
                 exercises: {},
                 activities: {},
-                stretchExercises: sessionData.stretchExercises || {}
+                stretchExercises: sessionData.stretchExercises || {},
+                stretchTargetExercises: getRelevantStretchExercises()
             };
 
             // Save activities
@@ -3547,7 +4075,8 @@
                     // Count completed stretch exercises
                     const stretchCount = workoutData.stretchExercises ? 
                         Object.values(workoutData.stretchExercises).filter(v => v).length : 0;
-                    activitiesHtml += `<span class="summary-activity-badge">🧘 Stretch (${stretchCount}/6)</span>`;
+                    const stretchTargetCount = workoutData.stretchTargetExercises?.length || stretchExercises.length;
+                    activitiesHtml += `<span class="summary-activity-badge">🧘 Stretch (${stretchCount}/${stretchTargetCount})</span>`;
                 }
                 activitiesList.innerHTML = activitiesHtml;
             } else {
@@ -3829,7 +4358,13 @@
                 'adduktor': 'Adduktor/Abduktor',
                 'latpull': 'Lat Pull',
                 'plank': 'Plankan',
-                'abcrunch': 'AB-crunch'
+                'abcrunch': 'AB-crunch',
+                'gobletsquat': 'Goblet squat',
+                'enarmsrodd': 'Enarms rodd',
+                'hemaxelpress': 'Axelpress hemma',
+                'hoftlyft': 'Höftlyft',
+                'brostpressgolv': 'Bröstpress golv',
+                'deadbug': 'Deadbug'
             };
             return names[exercise] || exercise;
         }
@@ -4198,13 +4733,17 @@
         const PROG_INCREMENT = {
             benpress: 5, benstrack: 2.5, larcurl: 2.5,
             rodd: 2.5, fly: 2.5, axelpress: 2.5,
-            adduktor: 2.5, latpull: 2.5, plank: 5, abcrunch: 2.5
+            adduktor: 2.5, latpull: 2.5, plank: 5, abcrunch: 2.5,
+            gobletsquat: 1, enarmsrodd: 1, hemaxelpress: 1,
+            hoftlyft: 1, brostpressgolv: 1, deadbug: 2
         };
 
         const PROG_TARGET_REPS = {
             benpress: 10, benstrack: 10, larcurl: 10,
             rodd: 10, fly: 10, axelpress: 8,
-            adduktor: 12, latpull: 10, plank: 0, abcrunch: 15
+            adduktor: 12, latpull: 10, plank: 0, abcrunch: 15,
+            gobletsquat: 12, enarmsrodd: 12, hemaxelpress: 12,
+            hoftlyft: 15, brostpressgolv: 12, deadbug: 10
         };
 
         function calculateExerciseSuggestion(exerciseKey, history) {
@@ -4467,7 +5006,9 @@
             const shortNames = {
                 benpress: 'Benpr.', benstrack: 'B.sträck', larcurl: 'Lårcurl',
                 rodd: 'Rodd', fly: 'Fly', axelpress: 'Axelpr.',
-                adduktor: 'Add/Abd', latpull: 'LatPull', plank: 'Planka', abcrunch: 'AB-crunch'
+                adduktor: 'Add/Abd', latpull: 'LatPull', plank: 'Planka', abcrunch: 'AB-crunch',
+                gobletsquat: 'Goblet', enarmsrodd: '1-arm rodd', hemaxelpress: 'Axel H',
+                hoftlyft: 'Höftlyft', brostpressgolv: 'Bröst golv', deadbug: 'Deadbug'
             };
 
             // Start from suggested weights
